@@ -1,0 +1,304 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.header h5 {
+    color: green;
+    font-weight: 500;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.header .btn {
+    background-color: #04AA6D;
+    color: #fff;
+    padding: 0px auto;
+    text-decoration: none;
+    font-size: 13px;
+    display: block;
+    border: 2px solid #555;
+}
+
+.header .btn:hover {
+    color: #fff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.9);
+}
+
+/* ================================================================================================================ */
+/* ================================================================================================================ */
+/* ================================================================================================================ */
+/* ================================================================================================================ */
+
+.address {
+    background-color: #fffefb;
+    padding-bottom: 20px;
+    position: relative;
+    padding-right: 100px;
+    padding: 20px;
+    /* border: 1px solid #15BE2F; */
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.address-card {
+    background-color: #fffefb;
+    padding-bottom: 20px;
+    position: relative;
+    padding-right: 100px;
+    padding: 20px;
+    border-radius: 5px;
+    /* border: 1px solid #ccc; */
+    max-width: 650px;
+    margin: 90px auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.address p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 12px;
+}
+
+.address-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: calc(100% - 100px);
+    /* Adjust the width as needed */
+}
+
+.address-info a {
+    color: red;
+}
+
+.address-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+    z-index: 1;
+}
+
+.address-actions a {
+    margin-left: 10px;
+    text-decoration: none;
+    color: red;
+}
+
+.edit-address {
+    background: none;
+    border: 0;
+    color: #08f;
+    outline: none;
+    padding: 4px;
+    white-space: nowrap;
+}
+
+.address-actions button,
+.address-actions a {
+    font-size: 13px;
+}
+
+.set_default {
+    border: 1px solid #ccc;
+    color: #888;
+}
+
+.default-label {
+    color: green;
+    border: 1px solid green;
+    padding: 0px 10px;
+    font-size: 12px;
+}
+
+.back-button i {
+    color: white;
+    font-size: 25px;
+}
+
+/* ================================================================================================================ */
+/* ================================================================================================================ */
+/* ================================================================================================================ */
+
+/* Modal CSS */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 90px auto;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 450px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.modal-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    color: #333;
+    margin: 0;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+/* Add CSS styles for labels */
+.modal-content label {
+    display: block;
+    margin-bottom: 0px;
+}
+
+/* Adjust input fields */
+#createProductModal .modal-content input[type="text"] {
+    width: calc(100% - 12px);
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+#editForm .modal-content input[type="text"] {
+    width: calc(100% - 12px);
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.modal-footer {
+    text-align: right;
+}
+
+.modal-footer button {
+    padding: 10px 20px !important;
+    background-color: #ee4d2d !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer button:hover {
+    background-color: #d63a1e !important;
+}
+
+.modal-content #saveEdit {
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content #saveEdit:hover {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.9);
+}
+
+.close-modal{
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: lightcoral;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* ============================================================================================== */
+/* ============================================================================================== */
+/* ============================================================================================== */
+.modal-header {
+    background-color: #fffefb;
+    /* border: 1px solid rgba(224, 168, 0, .4); */
+    border-radius: 2px;
+    display: flex;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.modal-header h5 {
+    color: #888;
+    font-weight: 700;
+    margin: 0;
+}
+
+.right-content {
+    position: absolute;
+    right: 20px;
+}
+/* 
+.btn-submit {
+    width: 100%;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.9);
+} */
+
+.modal-content .form-group label {
+    display: block;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 10px;
+}
+
+.address-container button:hover {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content .form-group {
+    margin-bottom: .5rem;
+}
+
+.modal-content .form-check {
+    margin-top: .5rem;
+}
+
+.modal-content .footer {
+    margin-top: 1rem;
+}
+
+.modal-content .footer .form-group {
+    margin-bottom: 0;
+}

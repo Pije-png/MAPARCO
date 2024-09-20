@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin: 100px auto;
+}
+
+.product-details-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+.product-image-container {
+    width: 300px;
+    max-height: 300px;
+    overflow: hidden;
+    border-radius: 8px 0 0 8px;
+}
+
+.product-image {
+    width: auto;
+    height: auto;
+    width: 100%;
+    max-height: 100%;
+}
+
+.product-info {
+    padding: 20px;
+    width: 650px;
+}
+
+.product-title {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: 500;
+    color: #ee4d2d;
+    margin-bottom: 20px;
+}
+
+.product-description {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.product-quantity p {
+    margin-bottom: 20px;
+    color: red;
+    font-size: 13px;
+    /* Changed font size */
+}
+
+.product-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row label {
+    font-size: 10px;
+}
+
+.decrement-btn,
+.increment-btn {
+    font-size: 15px;
+    padding: 5px 10px;
+    border: none;
+    color: gray;
+}
+
+.decrement-btn:hover,
+.increment-btn:hover {
+    color: red;
+}
+
+.product-buy-button {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(255, 87, 34, 0.1);
+    color: #ee4d2d;
+    font-size: 13px;
+    border: none;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 1px solid #ee4d2d;
+}
+
+.product-buy-button:hover {
+    background-color: rgb(255, 87, 34);
+    color: white;
+}
+
+.product-buy-now-button {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 13px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product-buy-now-button:hover {
+    background-color: #218838;
+}

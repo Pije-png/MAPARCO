@@ -1,0 +1,151 @@
+.highlight {
+    background-color: #fffacd !important;
+}
+
+.product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.crown {
+    font-size: 24px;
+    color: gold;
+    margin-left: 10px;
+}
+
+.border-left {
+    border-left: solid goldenrod 5px;
+}
+
+.text-end button {
+    border: solid #808080 2px;
+    padding: .25rem .5rem;
+    font-size: .75rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+}
+
+/* General Modal Styling */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+label {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+/* Focus on form fields */
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+/* Button Customizations */
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.modal-footer .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.modal-footer .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.modal-footer .btn:hover {
+    opacity: 0.9;
+}
+
+/* Spacing & Layout */
+.row {
+    margin-bottom: 15px;
+}
+
+#filterModal {
+    padding: 20px;
+}
+
+.filter-modal {}
+
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 10px;
+    }
+}
+
+.pie-chart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+}
+
+canvas {
+    max-width: 100%;
+    max-height: 260px;
+    min-height: 260px;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-container>div {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.admin-dashboard {
+    width: 100%;
+    border-collapse: collapse;
+    /* margin-bottom: 0; */
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table tr,
+table th,
+table td {
+    font-size: 12px;
+    border: 1px solid #999;
+    padding: 5px;
+}
+
+thead {
+    background-color: #98FB98;
+}
