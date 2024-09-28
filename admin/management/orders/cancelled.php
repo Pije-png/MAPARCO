@@ -78,13 +78,12 @@ $cancelled_count = $result->num_rows;
         table td {
             font-size: 12px;
             border: 1px solid #999;
-            padding: 5px;
         }
 
-
-tbody {
-    text-align: center;
-}
+        table tr,
+        table th {
+            padding: 5px;
+        }
 
         thead {
             background-color: #98FB98;
@@ -131,13 +130,12 @@ tbody {
 <body class="bg bg-light">
 
     <?php include 'sidebar-orders.php'; ?>
-      
 
     <section class="home">
         <div class="order-container">
             <div class="container-fluid">
                 <div class="head pt-3">
-                    <h4 class="text-center">Cancelled Lists</h4>
+                    <h4 class="text-center">List of Cancelled</h4>
                 </div>
                 <div class="column">
                     <div class="status-messages">

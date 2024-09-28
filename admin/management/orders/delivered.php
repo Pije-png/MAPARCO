@@ -194,7 +194,7 @@ $delivered_count = $delivered_count_result->fetch_assoc()['delivered_count'];
         <div class="order-container">
             <div class="container-fluid">
                 <div class="head pt-3">
-                    <h4 class="text-center">Delivered Lists</h4>
+                    <h4 class="text-center">List of Delivered</h4>
                 </div>
                 <div class="column">
                     <div class="status-messages">
@@ -228,7 +228,7 @@ $delivered_count = $delivered_count_result->fetch_assoc()['delivered_count'];
                                     <!-- <th>Shipping Address</th> -->
                                     <th style="text-align: center;">
                                         <label style="display: inline-flex; align-items: center; cursor: pointer;">
-                                            Select&nbsp;All&nbsp;&nbsp;<input type="checkbox" id="selectAllCheckbox" style="transform: scale(1.5); margin-right: 5px;">
+                                            <input type="checkbox" id="selectAllCheckbox" style="transform: scale(1.5);">
                                         </label>
                                     </th>
                                     <!-- <th>QR</th> -->

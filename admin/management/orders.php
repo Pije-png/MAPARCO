@@ -235,6 +235,7 @@ $result = $conn->query($sql);
 
 <body>
     <?php include 'sidebar.php'; ?>
+
     <?php include 'navbar.php'; ?>
 
     <section class="home">

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="sidebar-management.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -20,7 +20,7 @@
                 </span>
                 <div class="header-text text">
                     <span class="name">MAPARCO</span>
-                    <small>Online <i class="fa-solid fa-circle online-icon"></i></small>
+                    <p class="smol">Online <i class="fa-solid fa-circle online-icon"></i></p class="smol">
                 </div>
             </div>
             <i class='bx bx-chevron-right toggle'></i>
@@ -75,12 +75,6 @@
                             <li><a href="./orders/cancelled.php">Cancelled</a></li>
                         </ul>
                     </div>
-                    <li class="nav-link">
-                        <a href="./inventory.php" class="nav-link-item" id="inventory-link">
-                            <i class='fa-solid fa-warehouse icon'></i>
-                            <span class="nav-text text">Inventory</span>
-                        </a>
-                    </li>
                     <li class="nav-link">
                         <a href="./reviews.php" class="nav-link-item" id="reviews-link">
                             <i class='fa-solid fa-star icon'></i>

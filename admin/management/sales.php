@@ -35,6 +35,9 @@ while ($row = $resultSales->fetch_assoc()) {
     $filteredTotalSales += $row['TotalAmount'];
 }
 
+// Get the number of rows (sales records)
+$sales_count = $resultSales->num_rows;
+
 // Close the database connection
 $conn->close();
 ?>
@@ -45,6 +48,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/MAPARCO.png" />
     <title>Sales Report</title>
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <style>
@@ -112,19 +116,6 @@ $conn->close();
             margin-bottom: 20px;
         }
 
-        .sales-table th {
-            text-align: left;
-            font-size: 12px;
-            padding: 10px;
-            background-color: #8fd19e;
-        }
-
-        .sales-table td {
-            padding: 2px;
-            border-bottom: 1px solid #ddd;
-            font-size: 12px;
-        }
-
         .sales-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
@@ -139,10 +130,30 @@ $conn->close();
             object-fit: cover;
         }
 
-        .scrollsply {
-            max-height: 380px;
-            min-height: 380px;
-            scrollbar-width: thin;
+        .admin-dashboard {
+            width: 100%;
+            border-collapse: collapse;
+            /* margin-bottom: 0; */
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table tr,
+        table th,
+        table td {
+            font-size: 12px;
+            border: 1px solid #999;
+        }
+
+        table tr,
+        table th {
+            padding: 5px;
+        }
+
+        thead {
+            background-color: #98FB98;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -169,8 +180,10 @@ $conn->close();
 <body>
     <?php include 'sidebar.php'; ?>
 
-    <section class="home bg bg-success">
-        <div class="table container-fluid table container-fluid">
+    <!-- <?php include '../graphv2.php'; ?> -->
+
+    <section class="home">
+        <div class="container-fluid">
             <h2 class="fw-bold fs-3 pt-3">Sales Report</h2>
 
             <div class="total-sales">
@@ -197,21 +210,25 @@ $conn->close();
             </div>
 
             <div class="sales-table scrollsply" style="overflow-x:auto;">
-                <table>
+                <table class="text-center">
                     <thead class="table-success">
                         <tr>
-                            <th>Order ID</th>
+                            <th style="width:2%"></th>
+                            <th style="width:5%">Order ID</th>
                             <th>Customer Name</th>
                             <th>Order Date</th>
                             <th>Total Amount</th>
                             <th>Order Status</th>
-                            <th>Product Name</th>
-                            <th>Product Photo</th>
+                            <th>Product</th>
+                            <th>Photo</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $row_counter = 1; // Initialize row_counter outside the loop 
+                        ?>
                         <?php foreach ($salesData as $row) : ?>
                             <tr>
+                                <td><?php echo $row_counter++; ?></td> <!-- Incrementing row_counter with each row -->
                                 <td><?php echo $row['OrderID']; ?></td>
                                 <td><?php echo $row['CustomerName']; ?></td>
                                 <td><?php echo date("F j, Y", strtotime($row['OrderDate'])); ?></td>

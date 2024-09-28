@@ -191,11 +191,6 @@ $product_count = $result->num_rows;
             padding-left: 15px !important;
             margin-left: 15px !important;
         }
-
-        /* .nav-home {
-            padding-left: 20px !important;
-            margin-left: 20px !important;
-        } */
     </style>
 
 </head>
@@ -203,6 +198,7 @@ $product_count = $result->num_rows;
 <body>
     <?php include 'sidebar.php'; ?>
     <?php include 'inventory.php'; ?>
+
     <section class="home">
         <div class="container-fluid">
             <!-- Tab Navigation Menu -->
@@ -380,24 +376,26 @@ $product_count = $result->num_rows;
                                 <div class="col-md-4">
                                     <div class="card text-white bg-success sm-3">
                                         <div class="card-body">
-                                        <h6 class="card-title">Total Products Sold</h6>
+                                            <h6 class="card-title">Total Sold</h6>
                                             <h4 class="card-text"><?php echo $totalOrders; ?></h4>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="card text-white bg-success sm-3">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Total Products</h6>
-                                            <h4 class="card-text"><?php echo $totalProducts; ?></h4>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 <div class="col-md-4">
                                     <div class="card text-white bg-success sm-3">
                                         <div class="card-body">
                                             <h6 class="card-title">Total Sales</h6>
                                             <h4 class="card-text">₱<?php echo number_format($totalIncome, 2); ?></h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="card text-white bg-success sm-3">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Total Products</h6>
+                                            <h4 class="card-text"><?php echo $totalProducts; ?></h4>
                                         </div>
                                     </div>
                                 </div>

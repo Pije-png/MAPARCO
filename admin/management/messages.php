@@ -54,6 +54,7 @@
     </style>
 <body>
     <?php include 'sidebar.php'; ?>
+
     <?php include 'navbar.php'; ?>
 
     <div class="container">

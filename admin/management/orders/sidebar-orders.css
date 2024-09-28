@@ -74,7 +74,7 @@ body {
     top: 0;
     left: 0;
     height: 100%;
-    width: 230px;
+    width: 200px;
     background-color: var(--sidebar-color);
     transition: var(--tran-05);
     z-index: 100;
@@ -114,7 +114,7 @@ body {
 }
 
 .sidebar li {
-    height: 40px;
+    height: 38px;
     /* margin-top: 5px; */
     list-style: none;
     display: flex;
@@ -123,20 +123,19 @@ body {
 }
 
 .sidebar .icon {
-    font-size: 20px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .sidebar li .icon {
-    min-width: 60px;
+    min-width: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.sidebar li .icon,
 .sidebar li .text {
     color: var(--text-color);
     transition: var(--tran-02);
@@ -201,6 +200,7 @@ header .image-text .header-text {
     transition: all 0.1s ease-in-out;
 }
 
+
 .sidebar li a {
     height: 100%;
     width: 100%;
@@ -219,6 +219,13 @@ header .image-text .header-text {
 .sidebar .bottom-content li a:hover {
     background-color: lightcoral;
     color: #000;
+}
+
+.sidebar .menu-bar .menu li a.active {
+    /* background-color: #008000; */
+    border-left: solid 5px;
+    border-bottom: solid #f4f4f4 1px;
+    border-top: solid #f4f4f4 1px;
 }
 
 .sidebar .menu-bar .menu li a:hover .text {
@@ -255,8 +262,8 @@ header .image-text .header-text {
 .home {
     position: relative;
     height: 100vh;
-    left: 230px;
-    width: calc(100% - 230px);
+    left: 200px;
+    width: calc(100% - 200px);
     transition: var(--tran-05);
     background: var(--body-color);
 }

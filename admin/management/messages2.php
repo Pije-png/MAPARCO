@@ -40,4 +40,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_SERVER['HTTP_X_REQUESTED_WIT
 }
 ?>
 <?php include 'sidebar.php'; ?>
+
     <?php include 'navbar.php'; ?>

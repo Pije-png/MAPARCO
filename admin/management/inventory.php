@@ -59,6 +59,7 @@ $product_count = $result->num_rows;
 <body class="bg bg-light">
 
     <?php include 'sidebar.php'; ?>
+
      
 
     <section class="home">

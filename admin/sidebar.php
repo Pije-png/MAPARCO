@@ -7,8 +7,8 @@
     <link rel="icon" href="img/MAPARCO.png" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="sidebar-----admin.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="sidebar-admin.css">
     <title>Sidebar</title>
 </head>
 
@@ -21,7 +21,7 @@
                 </span>
                 <div class="header-text text">
                     <span class="name">MAPARCO</span>
-                    <small>Online <i class="fa-solid fa-circle online-icon"></i></small>
+                    <p class="smol">Online <i class="fa-solid fa-circle online-icon"></i></p class="smol">
                 </div>
             </div>
             <i class='bx bx-chevron-right toggle'></i>
@@ -106,7 +106,7 @@
                 </div>
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="#" class="nav-link-item" id="profile-link">
+                        <a href="profile.php" class="nav-link-item" id="profile-link">
                             <i class='bx bxs-user-circle icon'></i>
                             <span class="nav-text text">Profile</span>
                         </a>

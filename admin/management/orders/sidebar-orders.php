@@ -4,11 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="sidebar-orders.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Sidebar</title>
+    <style>
+        .pending {
+            color: #FFC107;
+        }
+
+        .processing {
+            color: #17A2B8;
+            animation: spin 1s infinite linear;
+        }
+
+        .shipped {
+            color: #007BFF;
+        }
+
+        .delivered {
+            color: #28A745;
+        }
+
+        .cancelled {
+            color: #DC3545;
+        }
+
+        .scan-qr {
+            color: #6C757D;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -26,107 +63,65 @@
             <i class='bx bx-chevron-right toggle'></i>
         </header>
 
-                    <div class="menu-bar mt-4">
+        <div class="menu-bar mt-4">
             <div class="menu">
+                <!-- Back to Dashboard link -->
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="../../home.php" class="nav-link-item">
+                            <i class="fa-solid fa-arrow-left icon"></i>
+                            <span class="nav-text text">Back to Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+
                 <!-- ===== Management ====== -->
                 <div class="header title">
-                    <strong>Management</strong>
+                    <strong>Orders</strong>
                 </div>
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a href="../../home.php" class="nav-link-item" id="dashboard-link">
-                            <i class='bx bxs-home icon'></i>
-                            <span class="nav-text text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="../products.php" class="nav-link-item" id="products-link">
-                            <i class='fa-solid fa-boxes icon'></i>
-                            <span class="nav-text text">Products</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="../customers.php" class="nav-link-item" id="customers-link">
-                            <i class="fa-solid fa-users icon"></i>
-                            <span class="nav-text text">Customers</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="../sales.php" class="nav-link-item" id="sales-link">
-                            <i class="fa-solid fa-chart-line icon"></i>
-                            <span class="nav-text text">Sales</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#" class="nav-link-item" id="orders-link" onclick="toggleCollapse('orders-status')">
-                            <i class='bx bxs-bar-chart-alt-2 icon'></i>
-                            <span class="nav-text text">Orders</span>
-                            <i class="fa-solid fa-angle-down offset-md-4 collapse-icon" id="orders-icon"></i>
-                        </a>
-                    </li>
-                    <!-- Collapsible section for orders status -->
-                    <div id="orders-status" class="collapse bg-dark">
-                        <ul class="submenu">
-                            <li><a href="pending.php">Pending</a></li>
-                            <li><a href="processing.php">Processing</a></li>
-                            <li><a href="shipped.php">Shipped</a></li>
-                            <li><a href="delivered.php">Delivered</a></li>
-                            <li><a href="../orders/scanner.php">Scan QR Code</a></li>
-                            <li><a href="cancelled.php">Cancelled</a></li>
-                        </ul>
-                    </div>
-                    <li class="nav-link">
-                        <a href="../inventory.php" class="nav-link-item" id="inventory-link">
-                            <i class='fa-solid fa-warehouse icon'></i>
-                            <span class="nav-text text">Inventory</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./reviews.php" class="nav-link-item" id="reviews-link">
-                            <i class='fa-solid fa-star icon'></i>
-                            <span class="nav-text text">Reviews</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="../topsales.php" class="nav-link-item" id="top-selling-link">
-                            <i class='fa-solid fa-trophy icon'></i>
-                            <span class="nav-text text">Top Selling</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="../history.php" class="nav-link-item" id="history-link">
-                            <i class='fa-solid fa-history icon'></i>
-                            <span class="nav-text text">History</span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="header title">
-                    <strong>Settings</strong>
-                </div>
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a href="#" class="nav-link-item" id="profile-link">
-                            <i class='bx bxs-user-circle icon'></i>
-                            <span class="nav-text text">Profile</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#" class="nav-link-item" id="shipping-options-link">
-                            <i class="fa-solid fa-truck-fast icon"></i>
-                            <span class="nav-text text">Shipping Options</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="bottom-content">
-                <li class="nav-link">
-                    <a href="../../../logout.php">
-                        <i class='bx bx-log-out icon'></i>
-                        <span class="nav-text text">Logout</span>
-                    </a>
-                </li>
+                <table>
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href="pending.php" class="nav-link-item" id="pending-link">
+                                <i class="fas fa-hourglass-start icon pending"></i>
+                                <span class="nav-text text">Pending</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="processing.php" class="nav-link-item" id="processing-link">
+                                <i class="fas fa-sync icon processing"></i>
+                                <span class="nav-text text">Processing</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="shipped.php" class="nav-link-item" id="shipped-link">
+                                <i class="fas fa-shipping-fast icon shipped"></i>
+                                <span class="nav-text text">Shipped</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="delivered.php" class="nav-link-item" id="delivered-link">
+                                <i class="fas fa-check-circle icon delivered"></i>
+                                <span class="nav-text text">Delivered</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="cancelled.php" class="nav-link-item" id="cancelled-link">
+                                <i class="fas fa-times-circle icon cancelled"></i>
+                                <span class="nav-text text">Cancelled</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="scanner.php" class="nav-link-item" id="scanner-link">
+                                <i class="fas fa-qrcode icon scan-qr"></i>
+                                <span class="nav-text text">Scan QR Code</span>
+                            </a>
+                        </li>
+                    </ul>
+                </table>
             </div>
         </div>
+
     </nav>
     <!-- <section class="home">
         <div class="text">Dashbaord</div>
@@ -185,56 +180,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var currentPageUrl = window.location.href;
-            var navLinks = document.querySelectorAll('.nav-link-item');
-
-            // Flag to check if any of the order pages is active
-            var isOrderPageActive = false;
-
-            navLinks.forEach(function(navLink) {
-                if (navLink.getAttribute('href') === currentPageUrl) {
-                    navLink.classList.add('active');
-
-                    // Check if the current page is an order page
-                    if (currentPageUrl.includes('pending.php') ||
-                        currentPageUrl.includes('processing.php') ||
-                        currentPageUrl.includes('shipped.php') ||
-                        currentPageUrl.includes('cancelled.php') ||
-                        currentPageUrl.includes('delivered.php')) {
-                        isOrderPageActive = true;
-                    }
+            var links = document.querySelectorAll('.menu-bar a');
+            links.forEach(function(link) {
+                if (link.href === currentPageUrl) {
+                    link.classList.add('active');
                 }
             });
-
-            // If any order page is active, mark the "Orders" link as active
-            if (isOrderPageActive) {
-                document.getElementById('orders-link').classList.add('active');
-            } else if (currentPageUrl.includes('pending.php')) {
-                // If the current page is the "Pending" page, mark the "Orders" link as active
-                document.getElementById('orders-link').classList.add('active');
-            }
-            if (isOrderPageActive) {
-                document.getElementById('orders-link').classList.add('active');
-            } else if (currentPageUrl.includes('processing.php')) {
-                document.getElementById('orders-link').classList.add('active');
-            }
-            if (isOrderPageActive) {
-                document.getElementById('orders-link').classList.add('active');
-            } else if (currentPageUrl.includes('shipped.php')) {
-                document.getElementById('orders-link').classList.add('active');
-            }
-            if (isOrderPageActive) {
-                document.getElementById('orders-link').classList.add('active');
-            } else if (currentPageUrl.includes('delivered.php')) {
-                document.getElementById('orders-link').classList.add('active');
-            }
-            if (isOrderPageActive) {
-                document.getElementById('orders-link').classList.add('active');
-            } else if (currentPageUrl.includes('cancelled.php')) {
-                document.getElementById('orders-link').classList.add('active');
-            }
         });
     </script>
-
 </body>
 
 </html>

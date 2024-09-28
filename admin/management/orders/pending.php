@@ -2,8 +2,8 @@
 include '../../../connection.php';
 
 if (isset($_POST['update_global_status'])) {
-    $orderIDs = $_POST['selected_order_ids'];  // This contains the selected order IDs as a comma-separated string
-    $orderIDsArray = explode(',', $orderIDs);  // Convert to array
+    $orderIDs = $_POST['selected_order_ids'];
+    $orderIDsArray = explode(',', $orderIDs);
 
     $newOrderStatus = $_POST['new_global_order_status'] ?? null;
     $newPaymentStatus = $_POST['new_global_payment_status'] ?? null;
@@ -11,14 +11,12 @@ if (isset($_POST['update_global_status'])) {
     if ($newOrderStatus || $newPaymentStatus) {
         foreach ($orderIDsArray as $orderID) {
             if ($newOrderStatus) {
-                // Update order status
                 $stmt = $conn->prepare("UPDATE orders SET OrderStatus = ? WHERE OrderID = ?");
                 $stmt->bind_param("si", $newOrderStatus, $orderID);
                 $stmt->execute();
             }
 
             if ($newPaymentStatus) {
-                // Update payment status
                 $stmt = $conn->prepare("UPDATE orders SET PaymentStatus = ? WHERE OrderID = ?");
                 $stmt->bind_param("si", $newPaymentStatus, $orderID);
                 $stmt->execute();
@@ -31,31 +29,58 @@ if (isset($_POST['update_global_status'])) {
     }
 }
 
+$rowCount = isset($_GET['rowCount']) ? (int)$_GET['rowCount'] : 10;
+$allowedRowCounts = [5, 10, 25, 50, 100];
+if (!in_array($rowCount, $allowedRowCounts)) {
+    $rowCount = 10;
+}
 
-$sortOrder = "DESC"; // Newest by default
+$search = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Check if the sort order is set in the URL
-if (isset($_GET['sortOrder'])) {
-    if ($_GET['sortOrder'] == 'oldest') {
-        $sortOrder = "ASC";  // Oldest first
+// Sorting logic
+$sortField = 'o.OrderDate';  // Default sort by date
+$sortOrder = "DESC";  // Default to "Newest"
+
+if (isset($_GET['sortBy'])) {
+    switch ($_GET['sortBy']) {
+        case 'name':
+            $sortField = 'a.FullName';
+            $sortOrder = 'ASC';
+            break;
+        case 'newest':
+            $sortField = 'o.OrderDate';
+            $sortOrder = 'DESC';
+            break;
+        case 'oldest':
+            $sortField = 'o.OrderDate';
+            $sortOrder = 'ASC';
+            break;
     }
 }
 
-// SQL query to fetch pending orders data with the selected sort order
 $sql = "SELECT o.*, a.FullName AS CustomerName, a.Description, a.HouseNo, a.Street, a.Barangay, a.City, a.Province, a.ZipCode, 
         p.ProductName, oi.Quantity, oi.Subtotal 
         FROM orders o 
         JOIN addresses a ON o.AddressID = a.AddressID
         JOIN orderitems oi ON o.OrderID = oi.OrderID
         JOIN products p ON oi.ProductID = p.ProductID
-        WHERE o.OrderStatus = 'Pending'
-        ORDER BY o.OrderDate $sortOrder";
-$result = $conn->query($sql);
+        WHERE o.OrderStatus = 'Pending'";
 
-// Get the count of pending orders
+if (!empty($search)) {
+    $search = $conn->real_escape_string($search);
+    $sql .= " AND (o.OrderID LIKE '%$search%' 
+                  OR a.FullName LIKE '%$search%' 
+                  OR p.ProductName LIKE '%$search%')";
+}
+
+$sql .= " ORDER BY $sortField $sortOrder
+          LIMIT $rowCount";
+
+$result = $conn->query($sql);
 $pending_count_sql = "SELECT COUNT(*) AS pending_count FROM orders WHERE OrderStatus = 'Pending'";
 $pending_count_result = $conn->query($pending_count_sql);
 $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
+
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +95,10 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <!-- <link rel="stylesheet" href="Order.css"> -->
     <title>Orders</title>
     <style>
+        .container-fluid {
+            background: linear-gradient(to bottom, MediumSeaGreen, white);
+        }
+
         .admin-dashboard {
             width: 100%;
             border-collapse: collapse;
@@ -186,6 +215,10 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
             font-size: 14px;
         }
 
+        i .qr {
+            font-size: 10px;
+        }
+
         /* Optional: Adding responsiveness */
         @media screen and (max-width: 768px) {
             .modal-content {
@@ -194,18 +227,68 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
             }
         }
     </style>
+    <style>
+        .row-selection {
+            display: flex;
+            justify-content: space-between;
+            /* background-color: #90EE90; */
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+
+        .row-selection label {
+            font-size: 13px;
+        }
+
+        #rowCount {
+            padding: 2px;
+            font-size: 13px;
+        }
+    </style>
+    <style>
+        .input-group .form-control {
+            border-radius: 5px 0 0 5px;
+            box-shadow: none;
+        }
+
+        .form-control::placeholder {
+            font-size: 12px;
+        }
+
+        .input-group .btn {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .input-group .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+
+        }
+
+        #clearSearch {
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+
+        .column {
+            display: flex;
+            justify-items: start;
+            gap: 5px;
+        }
+    </style>
+
 </head>
 
 <body class="bg bg-light">
 
     <?php include 'sidebar-orders.php'; ?>
-       
 
     <section class="home">
         <div class="order-container">
             <div class="container-fluid">
                 <div class="head pt-5">
-                    <h4 class="text-center">Pending Lists</h4>
+                    <h4 class="text-center">List of Pending</h4>
                 </div>
                 <div class="column">
                     <div class="status-messages">
@@ -216,27 +299,44 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                 </div>
                 <div class="orders-table-container">
                     <div class="header-container pb-5">
+                        <div class="row-selection p-1">
+                            <div class="column">
+                                <form method="get" action="">
+                                    <label for="rowCount">Number of rows:</label>
+                                    <select id="rowCount" name="rowCount" onchange="this.form.submit()">
+                                        <option value="5" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '5') echo 'selected'; ?>>5</option>
+                                        <option value="10" <?php if (!isset($_GET['rowCount']) || $_GET['rowCount'] == '10') echo 'selected'; ?>>10</option>
+                                        <option value="25" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '25') echo 'selected'; ?>>25</option>
+                                        <option value="50" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '50') echo 'selected'; ?>>50</option>
+                                        <option value="100" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '100') echo 'selected'; ?>>100</option>
+                                    </select>
+                                </form>
+                                <form method="get" action="">
+                                    <div class="input-group">
+                                        <select name="sortBy" style="font-size: 13px; padding: 2px" onchange="this.form.submit()">
+                                            <option value="newest" <?php if (!isset($_GET['sortBy']) || $_GET['sortBy'] == 'newest') echo 'selected'; ?>>Newest</option>
+                                            <option value="oldest" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'oldest') echo 'selected'; ?>>Oldest</option>
+                                            <option value="name" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'name') echo 'selected'; ?>>By Name</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- Search Form -->
+                            <form method="get" action="" class="d-flex justify-content-center">
+                                <div class="input-group" style="width: 380px;">
+                                    <input type="text" class="form-control border border-success" name="search" placeholder="Search by Order ID, Name, or Product"
+                                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                                    <button class="btn btn-primary" style="font-size: 12px;" type="submit">Search</button>
+                                    <!-- Clear Button -->
+                                    <a href="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>" class="btn btn-outline-secondary" style="margin-left: 3px; border-radius: 0px 5px 5px 0px">x</a>
+                                </div>
+                            </form>
+                        </div>
 
                         <table class="admin-dashboard">
                             <thead>
-                                <!-- <tr class="sort bg bg-light">
-                                    <th colspan="3">
-                                        <form method="get" id="searchForm" class="d-inline-block">
-                                            <input type="text" name="searchQuery" class="form-control form-control-sm" style="font-size:12px;" placeholder="Search orders...">
-                                        </form>
-                                    </th>
-                                    <th colspan="6"><button type="submit" class="btn btn-sm btn-primary" style="font-size:12px;">Search</button></th>
-                                    <th class="text-center">
-                                        <form method="get" id="sortForm" style="font-size: 10px; display: inline-block;">
-                                            <select name="sortOrder" class="form-select form-select-sm" style="font-size:12px; width: 0x;" onchange="document.getElementById('sortForm').submit();">
-                                                <option value="newest" <?php if (!isset($_GET['sortOrder']) || $_GET['sortOrder'] == 'newest') echo 'selected'; ?>>Newest</option>
-                                                <option value="oldest" <?php if (isset($_GET['sortOrder']) && $_GET['sortOrder'] == 'oldest') echo 'selected'; ?>>Oldest</option>
-                                            </select>
-                                        </form>
-                                    </th>
-                                </tr> -->
-
                                 <tr class="fw-bold fs-5 bg bg-success text-light">
+                                    <!-- <th></th> -->
                                     <th colspan="8">Pending
                                         <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo htmlspecialchars($pending_count); ?></span>
                                     </th>
@@ -247,7 +347,7 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                     </th>
                                 </tr>
                                 <tr class="text-center">
-                                    <th style="width:2%"></th>
+                                    <th style="width:3%"></th>
                                     <th style="width:2%">Order&nbsp;ID</th>
                                     <th>Name</th>
                                     <th>Product</th>
@@ -256,12 +356,10 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                     <th>Order Status</th>
                                     <th>Payment Status</th>
                                     <!-- <th>Shipping Address</th> -->
-                                    <th style="text-align: center;">
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer;">
-                                            Select&nbsp;All&nbsp;&nbsp;<input type="checkbox" id="selectAllCheckbox" style="transform: scale(1.5); margin-right: 5px;">
-                                        </label>
-                                    </th>
                                     <th>QR</th>
+                                    <th style="width:3%">
+                                        <input type="checkbox" id="selectAllCheckbox" style="transform: scale(1.2);">
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="text-center bg bg-light">
@@ -278,10 +376,14 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                         echo "<td class='TotalAmount'>₱" . htmlspecialchars($row["TotalAmount"]) . "</td>";
                                         echo "<td class='order-status-" . strtolower(str_replace(' ', '-', $row["OrderStatus"])) . "'>" . htmlspecialchars($row["OrderStatus"]) . "</td>";
                                         echo "<td class='payment-status-" . strtolower(str_replace(' ', '-', $row["PaymentStatus"])) . "'>" . htmlspecialchars($row["PaymentStatus"]) . "</td>";
-                                        echo "<td style='width:5%;'><input type='checkbox' name='order_ids[]' value='" . htmlspecialchars($row["OrderID"]) . "' class='order-checkbox' style='transform: scale(1.5);'></td>";
+
                                         echo "<td style='width: 0px'>";
-                                        echo "<button type='button' class='btn btn-primary btn-sm' onclick='generateQRCode(" . htmlspecialchars($row["OrderID"]) . ", \"" . htmlspecialchars($row["HouseNo"] . " " . $row["Street"] . ", " . $row["Barangay"] . ", " . $row["City"] . ", " . $row["Province"] . " " . $row["ZipCode"]) . "\")'><i class='bx bxs-download'></i></button>";
+                                        echo "<button type='button' class='btn btn-primary btn-sm' style='font-size:10px;' onclick='generateQRCode(" . htmlspecialchars($row["OrderID"]) . ", \"" . htmlspecialchars($row["HouseNo"] . " " . $row["Street"] . ", " . $row["Barangay"] . ", " . $row["City"] . ", " . $row["Province"] . " " . $row["ZipCode"]) . "\")'>
+                                        <i class='bx bxs-download'></i>
+                                      </button>";
+
                                         echo "</td>";
+                                        echo "<td><input type='checkbox' name='order_ids[]' value='" . htmlspecialchars($row["OrderID"]) . "' class='order-checkbox' style='transform: scale(1.5);'></td>";
                                         echo "</tr>";
                                     }
                                 } else {
@@ -296,192 +398,13 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                 </td>
                             </tfoot>
                         </table>
-
-                        <script>
-                            // Select All Checkbox functionality
-                            document.getElementById('selectAllCheckbox').addEventListener('change', function() {
-                                var checkboxes = document.querySelectorAll('.order-checkbox');
-                                for (var checkbox of checkboxes) {
-                                    checkbox.checked = this.checked;
-                                }
-                            });
-
-                            // Clear individual checkboxes when the clear button is clicked
-                            document.getElementById('clearCheckboxes').addEventListener('click', function() {
-                                var checkboxes = document.querySelectorAll('.order-checkbox');
-                                for (var checkbox of checkboxes) {
-                                    checkbox.checked = false;
-                                }
-                                document.getElementById('selectAllCheckbox').checked = false;
-                            });
-                        </script>
-
-                        <!-- Global Edit Modal -->
-                        <div id="globalEditModal" class="modal">
-                            <div class="modal-content">
-                                <h4>Update Status</h4>
-                                <form method="post" id="globalEditForm">
-                                    <div class="form-group">
-                                        <label for="newGlobalOrderStatus">Order Status</label>
-                                        <select name="new_global_order_status" id="newGlobalOrderStatus" class="form-select form-select-sm">
-                                            <option value="" disabled selected>Status</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Processing">Processing</option>
-                                            <option value="Shipped">Shipped</option>
-                                            <option value="Delivered">Delivered</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="newGlobalPaymentStatus">Payment Status</label>
-                                        <select name="new_global_payment_status" id="newGlobalPaymentStatus" class="form-select form-select-sm">
-                                            <option value="" disabled selected>Status</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Paid">Paid</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- This hidden input will store selected order IDs -->
-                                    <input type="hidden" name="selected_order_ids" id="selectedOrderIds">
-
-                                    <div class="action-btn d-flex justify-content-end">
-                                        <button type="button" class="btn btn-outline-basic" onclick="closeGlobalEditModal()">Cancel</button>
-                                        <button type="submit" name="update_global_status" class="btn btn-primary">Update</button>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-
-                        </table>
+                        <?php include 'modal_pending.php'; ?>
                     </div>
-                </div>
-            </div>
-
-            <!-- Modal HTML -->
-            <div id="qrModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal()">&times;</span>
-                    <p>Scan this QR Code to mark order as Delivered</p>
-                    <div id="qrCodeContainer"></div>
-                    <a id="downloadLink" download="QRCode.png">Download QR Code</a>
-                </div>
-            </div>
-            <!-- Modal HTML for Shipping Address -->
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close btn btn-outline-danger ms-auto rounded-0" onclick="closeModal()">&times;</span>
-                    <p id="shippingAddressContent"></p>
                 </div>
             </div>
         </div>
     </section>
-    <footer class="footer bg bg-success">
-        <!-- Empty footer -->
-    </footer>
 
-    <script>
-        // Function to clear all selected checkboxes
-        function clearSelectedCheckboxes() {
-            document.querySelectorAll('.order-checkbox').forEach(function(checkbox) {
-                checkbox.checked = false;
-            });
-        }
-
-        // Attach the function to the "Clear" button
-        document.getElementById('clearCheckboxes').addEventListener('click', clearSelectedCheckboxes);
-    </script>
-    <!-- // Open the global edit modal -->
-    <script>
-        function openGlobalEditModal() {
-            var modal = document.getElementById("globalEditModal");
-            var selectedOrderIds = [];
-
-            // Get all checked checkboxes and store their values (Order IDs)
-            document.querySelectorAll('.order-checkbox:checked').forEach(function(checkbox) {
-                selectedOrderIds.push(checkbox.value);
-            });
-
-            // Check if there are any selected orders
-            if (selectedOrderIds.length === 0) {
-                alert("Please select at least one order.");
-                return;
-            }
-
-            // Set the hidden input value with the selected Order IDs
-            document.getElementById("selectedOrderIds").value = selectedOrderIds.join(",");
-
-            // Show the modal
-            modal.style.display = "block";
-        }
-
-        // Close the modal
-        function closeGlobalEditModal() {
-            var modal = document.getElementById("globalEditModal");
-            modal.style.display = "none";
-        }
-
-        // Close the modal if the user clicks outside of it
-        window.onclick = function(event) {
-            var modal = document.getElementById("globalEditModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
-
-    <!-- qr -->
-    <script>
-        // Function to display modal with shipping address
-        function displayShippingAddress(address) {
-            var modal = document.getElementById("myModal");
-            var addressContent = document.getElementById("shippingAddressContent");
-            addressContent.innerHTML = "<strong>Shipping Address:</br></strong> " + address;
-            modal.style.display = "block";
-        }
-
-        // Function to generate QR code and display in modal
-        function generateQRCode(orderID) {
-            fetch('generate_qr.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'generate_qr=true&order_id=' + orderID,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        var qrModal = document.getElementById("qrModal");
-                        var qrCodeContainer = document.getElementById("qrCodeContainer");
-                        qrCodeContainer.innerHTML = '<img src="' + data.qrImage + '" alt="QR Code">';
-                        var downloadLink = document.getElementById("downloadLink");
-                        downloadLink.href = data.qrImage;
-                        qrModal.style.display = "block";
-                    } else {
-                        alert("Error generating QR code.");
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function closeModal() {
-            var qrModal = document.getElementById("qrModal");
-            qrModal.style.display = "none";
-            var myModal = document.getElementById("myModal");
-            myModal.style.display = "none";
-        }
-
-        // Close the modal when clicking outside of it
-        window.onclick = function(event) {
-            var qrModal = document.getElementById("qrModal");
-            var myModal = document.getElementById("myModal");
-            if (event.target == qrModal || event.target == myModal) {
-                qrModal.style.display = "none";
-                myModal.style.display = "none";
-            }
-        }
-    </script>
     <script>
         const toggle = document.querySelector(".toggle");
         const sidebar = document.querySelector(".sidebar");

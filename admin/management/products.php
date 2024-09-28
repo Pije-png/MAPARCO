@@ -251,6 +251,7 @@ $product_count = $result->num_rows;
 
     <?php include 'sidebar.php'; ?>
 
+
     <section class="home">
         <div class="customer-container">
             <div class="container-fluid">
