@@ -97,6 +97,7 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <style>
         .container-fluid {
             background: linear-gradient(to bottom, MediumSeaGreen, white);
+            padding: 30px;
         }
 
         .admin-dashboard {
@@ -104,6 +105,56 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
             border-collapse: collapse;
             /* margin-bottom: 0; */
         }
+
+        .head .text-center {
+            /* padding: 0 15px; */
+            font-weight: bold;
+            font-size: 24px;
+            color: #b58d41;
+        }
+
+        .head {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            /* Adjust space between text and arrows */
+        }
+
+        .pending-header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+        }
+
+        .arrow {
+            width: 60px;
+            /* Adjust width as needed */
+            height: 10px;
+            position: relative;
+        }
+
+        .arrow.left::before,
+        .arrow.right::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            border-left: 15px solid rgba(237, 230, 204, 1);
+            /* Arrow color */
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .arrow.left::before {
+            left: 0;
+            transform: rotate(180deg);
+        }
+
+        .arrow.right::after {
+            right: 0;
+        }
+
 
         table {
             border-collapse: collapse;
@@ -287,122 +338,130 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <section class="home">
         <div class="order-container">
             <div class="container-fluid">
-                <div class="head pt-5">
-                    <h4 class="text-center">List of Pending</h4>
-                </div>
-                <div class="column">
-                    <div class="status-messages">
-                        <?php if (isset($global_update_message)) {
-                            echo "<div class='status-message'>" . htmlspecialchars($global_update_message) . "</div>";
-                        } ?>
+                <div class="pt-3 pb-5">
+                    <div class="head pb-4">
+                        <div class="arrow left"></div>
+                        <p class="pending-header text-center h4 fw-bold text-light" style="font-style: italic; "><i class="fa-solid fa-fire"></i> List of Pending</p>
+                        <div class="arrow right"></div>
                     </div>
-                </div>
-                <div class="orders-table-container">
-                    <div class="header-container pb-5">
-                        <div class="row-selection p-1">
+                    <div class="card">
+                        <div class="card-body">
+
                             <div class="column">
-                                <form method="get" action="">
-                                    <label for="rowCount">Number of rows:</label>
-                                    <select id="rowCount" name="rowCount" onchange="this.form.submit()">
-                                        <option value="5" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '5') echo 'selected'; ?>>5</option>
-                                        <option value="10" <?php if (!isset($_GET['rowCount']) || $_GET['rowCount'] == '10') echo 'selected'; ?>>10</option>
-                                        <option value="25" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '25') echo 'selected'; ?>>25</option>
-                                        <option value="50" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '50') echo 'selected'; ?>>50</option>
-                                        <option value="100" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '100') echo 'selected'; ?>>100</option>
-                                    </select>
-                                </form>
-                                <form method="get" action="">
-                                    <div class="input-group">
-                                        <select name="sortBy" style="font-size: 13px; padding: 2px" onchange="this.form.submit()">
-                                            <option value="newest" <?php if (!isset($_GET['sortBy']) || $_GET['sortBy'] == 'newest') echo 'selected'; ?>>Newest</option>
-                                            <option value="oldest" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'oldest') echo 'selected'; ?>>Oldest</option>
-                                            <option value="name" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'name') echo 'selected'; ?>>By Name</option>
-                                        </select>
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- Search Form -->
-                            <form method="get" action="" class="d-flex justify-content-center">
-                                <div class="input-group" style="width: 380px;">
-                                    <input type="text" class="form-control border border-success" name="search" placeholder="Search by Order ID, Name, or Product"
-                                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                                    <button class="btn btn-primary" style="font-size: 12px;" type="submit">Search</button>
-                                    <!-- Clear Button -->
-                                    <a href="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>" class="btn btn-outline-secondary" style="margin-left: 3px; border-radius: 0px 5px 5px 0px">x</a>
+                                <div class="status-messages">
+                                    <?php if (isset($global_update_message)) {
+                                        echo "<div class='status-message'>" . htmlspecialchars($global_update_message) . "</div>";
+                                    } ?>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="orders-table-container">
+                                <div class="header-container">
+                                    <div class="row-selection p-1">
+                                        <div class="column">
+                                            <form method="get" action="">
+                                                <label for="rowCount">Number of rows:</label>
+                                                <select id="rowCount" name="rowCount" onchange="this.form.submit()">
+                                                    <option value="5" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '5') echo 'selected'; ?>>5</option>
+                                                    <option value="10" <?php if (!isset($_GET['rowCount']) || $_GET['rowCount'] == '10') echo 'selected'; ?>>10</option>
+                                                    <option value="25" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '25') echo 'selected'; ?>>25</option>
+                                                    <option value="50" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '50') echo 'selected'; ?>>50</option>
+                                                    <option value="100" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '100') echo 'selected'; ?>>100</option>
+                                                </select>
+                                            </form>
+                                            <form method="get" action="">
+                                                <div class="input-group">
+                                                    <select name="sortBy" style="font-size: 13px; padding: 2px" onchange="this.form.submit()">
+                                                        <option value="newest" <?php if (!isset($_GET['sortBy']) || $_GET['sortBy'] == 'newest') echo 'selected'; ?>>Newest</option>
+                                                        <option value="oldest" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'oldest') echo 'selected'; ?>>Oldest</option>
+                                                        <option value="name" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'name') echo 'selected'; ?>>By Name</option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- Search Form -->
+                                        <form method="get" action="" class="d-flex justify-content-center">
+                                            <div class="input-group" style="width: 380px;">
+                                                <input type="text" class="form-control border border-success" name="search" placeholder="Search by Order ID, Name, or Product"
+                                                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                                                <button class="btn btn-primary" style="font-size: 12px;" type="submit">Search</button>
+                                                <!-- Clear Button -->
+                                                <a href="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>" class="btn btn-outline-danger" style="margin-left: 3px; border-radius: 0px 5px 5px 0px">x</a>
+                                            </div>
+                                        </form>
+                                    </div>
 
-                        <table class="admin-dashboard">
-                            <thead>
-                                <tr class="fw-bold fs-5 bg bg-success text-light">
-                                    <!-- <th></th> -->
-                                    <th colspan="8">Pending
-                                        <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo htmlspecialchars($pending_count); ?></span>
-                                    </th>
+                                    <table class="admin-dashboard">
+                                        <thead>
+                                            <tr class="fw-bold fs-5 bg bg-success text-light">
+                                                <!-- <th></th> -->
+                                                <th colspan="8">Pending
+                                                    <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo htmlspecialchars($pending_count); ?></span>
+                                                </th>
 
-                                    <th colspan="2">
-                                        <!-- Global Edit Button -->
-                                        <button type="button" class="editbtn btn btn-sm btn-success border-0" onclick="openGlobalEditModal()">Edit</button>
-                                    </th>
-                                </tr>
-                                <tr class="text-center">
-                                    <th style="width:3%"></th>
-                                    <th style="width:2%">Order&nbsp;ID</th>
-                                    <th>Name</th>
-                                    <th>Product</th>
-                                    <th>Order Date</th>
-                                    <th>Total Amount</th>
-                                    <th>Order Status</th>
-                                    <th>Payment Status</th>
-                                    <!-- <th>Shipping Address</th> -->
-                                    <th>QR</th>
-                                    <th style="width:3%">
-                                        <input type="checkbox" id="selectAllCheckbox" style="transform: scale(1.2);">
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center bg bg-light">
-                                <?php
-                                $row_counter = 1;
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<td>" . $row_counter++ . "</td>";
-                                        echo "<td>" . htmlspecialchars($row["OrderID"]) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row["CustomerName"]) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row["ProductName"]) . "</td>"; // Display the product name
-                                        echo "<td>" . date("F j, Y", strtotime($row["OrderDate"])) . "</td>";
-                                        echo "<td class='TotalAmount'>₱" . htmlspecialchars($row["TotalAmount"]) . "</td>";
-                                        echo "<td class='order-status-" . strtolower(str_replace(' ', '-', $row["OrderStatus"])) . "'>" . htmlspecialchars($row["OrderStatus"]) . "</td>";
-                                        echo "<td class='payment-status-" . strtolower(str_replace(' ', '-', $row["PaymentStatus"])) . "'>" . htmlspecialchars($row["PaymentStatus"]) . "</td>";
+                                                <th colspan="2">
+                                                    <!-- Global Edit Button -->
+                                                    <button type="button" class="editbtn btn btn-sm btn-success border-0" onclick="openGlobalEditModal()">Edit</button>
+                                                </th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th style="width:3%"></th>
+                                                <th style="width:2%">Order&nbsp;ID</th>
+                                                <th>Name</th>
+                                                <th>Product</th>
+                                                <th>Order Date</th>
+                                                <th>Total Amount</th>
+                                                <th>Order Status</th>
+                                                <th>Payment Status</th>
+                                                <!-- <th>Shipping Address</th> -->
+                                                <th>QR</th>
+                                                <th style="width:3%">
+                                                    <input type="checkbox" id="selectAllCheckbox" style="transform: scale(1.2);">
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center bg bg-light">
+                                            <?php
+                                            $row_counter = 1;
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    echo "<tr>";
+                                                    echo "<td>" . $row_counter++ . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row["OrderID"]) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row["CustomerName"]) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row["ProductName"]) . "</td>"; // Display the product name
+                                                    echo "<td>" . date("F j, Y", strtotime($row["OrderDate"])) . "</td>";
+                                                    echo "<td class='TotalAmount'>₱" . htmlspecialchars($row["TotalAmount"]) . "</td>";
+                                                    echo "<td class='order-status-" . strtolower(str_replace(' ', '-', $row["OrderStatus"])) . "'>" . htmlspecialchars($row["OrderStatus"]) . "</td>";
+                                                    echo "<td class='payment-status-" . strtolower(str_replace(' ', '-', $row["PaymentStatus"])) . "'>" . htmlspecialchars($row["PaymentStatus"]) . "</td>";
 
-                                        echo "<td style='width: 0px'>";
-                                        echo "<button type='button' class='btn btn-primary btn-sm' style='font-size:10px;' onclick='generateQRCode(" . htmlspecialchars($row["OrderID"]) . ", \"" . htmlspecialchars($row["HouseNo"] . " " . $row["Street"] . ", " . $row["Barangay"] . ", " . $row["City"] . ", " . $row["Province"] . " " . $row["ZipCode"]) . "\")'>
+                                                    echo "<td style='width: 0px'>";
+                                                    echo "<button type='button' class='btn btn-primary btn-sm' style='font-size:10px;' onclick='generateQRCode(" . htmlspecialchars($row["OrderID"]) . ", \"" . htmlspecialchars($row["HouseNo"] . " " . $row["Street"] . ", " . $row["Barangay"] . ", " . $row["City"] . ", " . $row["Province"] . " " . $row["ZipCode"]) . "\")'>
                                         <i class='bx bxs-download'></i>
                                       </button>";
 
-                                        echo "</td>";
-                                        echo "<td><input type='checkbox' name='order_ids[]' value='" . htmlspecialchars($row["OrderID"]) . "' class='order-checkbox' style='transform: scale(1.5);'></td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='10'>No orders found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                            <tfoot class="bg bg-light">
-                                <td colspan="8"></td>
-                                <td colspan="2" class="text-center p-0 fs-6">
-                                    <button type="button" id="clearCheckboxes" class="btn btn-outline-basic btn-sm">Clear</button>
-                                </td>
-                            </tfoot>
-                        </table>
-                        <?php include 'modal_pending.php'; ?>
+                                                    echo "</td>";
+                                                    echo "<td><input type='checkbox' name='order_ids[]' value='" . htmlspecialchars($row["OrderID"]) . "' class='order-checkbox' style='transform: scale(1.5);'></td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='10'>No orders found</td></tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                        <tfoot class="bg bg-light">
+                                            <td colspan="8"></td>
+                                            <td colspan="2" class="text-center p-0 fs-6">
+                                                <button type="button" id="clearCheckboxes" class="btn btn-outline-basic btn-sm">Clear</button>
+                                            </td>
+                                        </tfoot>
+                                    </table>
+                                    <?php include 'modal_pending.php'; ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 
     <script>
