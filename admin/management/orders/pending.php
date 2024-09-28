@@ -95,10 +95,6 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <!-- <link rel="stylesheet" href="Order.css"> -->
     <title>Orders</title>
     <style>
-        .container-fluid {
-            background: linear-gradient(to bottom, MediumSeaGreen, white);
-        }
-
         .admin-dashboard {
             width: 100%;
             border-collapse: collapse;
@@ -328,7 +324,7 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                         value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                                     <button class="btn btn-primary" style="font-size: 12px;" type="submit">Search</button>
                                     <!-- Clear Button -->
-                                    <a href="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>" class="btn btn-outline-secondary" style="margin-left: 3px; border-radius: 0px 5px 5px 0px">x</a>
+                                    <a href="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>" class="btn btn-outline-danger rounded-0" style="margin-left: 3px">x</a>
                                 </div>
                             </form>
                         </div>
