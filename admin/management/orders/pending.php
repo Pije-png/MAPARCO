@@ -23,9 +23,9 @@ if (isset($_POST['update_global_status'])) {
             }
         }
 
-        $global_update_message = "Selected orders updated successfully!";
+        $global_update_message = "Orders updated successfully!";
     } else {
-        $global_update_message = "Please select at least one status to update.";
+        $global_update_message = "Select a status to update!";
     }
 }
 
@@ -58,6 +58,8 @@ if (isset($_GET['sortBy'])) {
     }
 }
 
+$paymentStatus = isset($_GET['paymentStatus']) ? $_GET['paymentStatus'] : 'All';
+
 $sql = "SELECT o.*, a.FullName AS CustomerName, a.Description, a.HouseNo, a.Street, a.Barangay, a.City, a.Province, a.ZipCode, 
         p.ProductName, oi.Quantity, oi.Subtotal 
         FROM orders o 
@@ -65,6 +67,15 @@ $sql = "SELECT o.*, a.FullName AS CustomerName, a.Description, a.HouseNo, a.Stre
         JOIN orderitems oi ON o.OrderID = oi.OrderID
         JOIN products p ON oi.ProductID = p.ProductID
         WHERE o.OrderStatus = 'Pending'";
+
+if ($paymentStatus !== 'All') {
+    $paymentStatus = $conn->real_escape_string($paymentStatus);
+    if ($paymentStatus === 'Not Paid') {
+        $sql .= " AND o.PaymentStatus = 'Pending'";
+    } else {
+        $sql .= " AND o.PaymentStatus = '$paymentStatus'";
+    }
+}
 
 if (!empty($search)) {
     $search = $conn->real_escape_string($search);
@@ -92,243 +103,8 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" href="img/MAPARCO.png" />
-    <!-- <link rel="stylesheet" href="Order.css"> -->
+    <link rel="stylesheet" href="css/orders.css">
     <title>Orders</title>
-    <style>
-        .container-fluid {
-            background: linear-gradient(to bottom, MediumSeaGreen, white);
-            padding: 30px;
-        }
-
-        .admin-dashboard {
-            width: 100%;
-            border-collapse: collapse;
-            /* margin-bottom: 0; */
-        }
-
-        .head .text-center {
-            /* padding: 0 15px; */
-            font-weight: bold;
-            font-size: 24px;
-            color: #b58d41;
-        }
-
-        .head {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            /* Adjust space between text and arrows */
-        }
-
-        .pending-header {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            margin: 0;
-        }
-
-        .arrow {
-            width: 60px;
-            /* Adjust width as needed */
-            height: 10px;
-            position: relative;
-        }
-
-        .arrow.left::before,
-        .arrow.right::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            border-left: 15px solid rgba(237, 230, 204, 1);
-            /* Arrow color */
-            border-top: 5px solid transparent;
-            border-bottom: 5px solid transparent;
-        }
-
-        .arrow.left::before {
-            left: 0;
-            transform: rotate(180deg);
-        }
-
-        .arrow.right::after {
-            right: 0;
-        }
-
-
-        table {
-            border-collapse: collapse;
-
-        }
-
-        table tr,
-        table th {
-            font-size: 12px;
-            border: 1px solid #999;
-            padding: 5px;
-        }
-
-        table td {
-            font-size: 12px;
-            border: 1px solid #999;
-            padding: 5px;
-        }
-
-        thead {
-            background-color: #98FB98;
-        }
-
-        .payment-status-pending {
-            color: orange;
-        }
-
-        .payment-status-paid {
-            color: #888;
-        }
-
-        input[type="checkbox"] {
-            transform: scale(1.5);
-        }
-    </style>
-    <style>
-        .editbtn {
-            width: 100%;
-        }
-
-        .order-status-pending {
-            color: orange;
-        }
-
-        .order-status-processing {
-            color: blue;
-        }
-
-        .order-status-shipped {
-            color: #15BE2F;
-        }
-
-        .order-status-delivered {
-            color: #888;
-        }
-    </style>
-    <!-- modal -->
-    <style>
-        /* The Modal (background overlay) */
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black with transparency */
-        }
-
-        /* Modal Content */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 3% auto;
-            /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            /* Could be more or less, depending on screen size */
-            max-width: 600px;
-            /* Limit the width */
-            border-radius: 8px;
-            /* Rounded corners */
-        }
-
-        /* Form elements inside modal */
-        .modal-content h4 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .modal-content .form-group {
-            margin-bottom: 15px;
-        }
-
-        .modal-content select {
-            width: 100%;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        i .qr {
-            font-size: 10px;
-        }
-
-        /* Optional: Adding responsiveness */
-        @media screen and (max-width: 768px) {
-            .modal-content {
-                width: 90%;
-                /* Adjust modal width for smaller screens */
-            }
-        }
-    </style>
-    <style>
-        .row-selection {
-            display: flex;
-            justify-content: space-between;
-            /* background-color: #90EE90; */
-            padding-top: 5px;
-            padding-bottom: 5px;
-            margin-bottom: 5px;
-        }
-
-        .row-selection label {
-            font-size: 13px;
-        }
-
-        #rowCount {
-            padding: 2px;
-            font-size: 13px;
-        }
-    </style>
-    <style>
-        .input-group .form-control {
-            border-radius: 5px 0 0 5px;
-            box-shadow: none;
-        }
-
-        .form-control::placeholder {
-            font-size: 12px;
-        }
-
-        .input-group .btn {
-            border-radius: 0 5px 5px 0;
-        }
-
-        .input-group .form-control:focus {
-            border-color: #28a745;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-
-        }
-
-        #clearSearch {
-            margin-left: 10px;
-            border-radius: 5px;
-        }
-
-        .column {
-            display: flex;
-            justify-items: start;
-            gap: 5px;
-        }
-    </style>
-
 </head>
 
 <body class="bg bg-light">
@@ -338,21 +114,29 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <section class="home">
         <div class="order-container">
             <div class="container-fluid">
-                <div class="pt-3 pb-5">
-                    <div class="head pb-4">
+                <div class="pt-2 pb-5">
+                    <div class="head pb-2">
                         <div class="arrow left"></div>
-                        <p class="pending-header text-center h4 fw-bold text-light" style="font-style: italic; "><i class="fa-solid fa-fire"></i> List of Pending</p>
+                        <p class="pending-header text-center h4 fw-bold text-light" style="font-style: italic; font-family: cursive; "><i class="fa-solid fa-fire"></i> List of Pending</p>
                         <div class="arrow right"></div>
+                    </div>
+                    <div class="text-white column pb-3 justify-content-center">
+                        <div class="col-auto">
+                            <div class="filter-option" data-filter="All">All</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="filter-option" data-filter="Paid">Paid</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="filter-option" data-filter="Not Paid">Not Paid</div>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
-
-                            <div class="column">
-                                <div class="status-messages">
-                                    <?php if (isset($global_update_message)) {
-                                        echo "<div class='status-message'>" . htmlspecialchars($global_update_message) . "</div>";
-                                    } ?>
-                                </div>
+                            <div class="status-messages">
+                                <?php if (isset($global_update_message)) {
+                                    echo "<div class='status-message'>" . htmlspecialchars($global_update_message) . " <i class='bx bxs-check-circle text-success'></i></div>";
+                                } ?>
                             </div>
                             <div class="orders-table-container">
                                 <div class="header-container">
@@ -383,7 +167,7 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                             <div class="input-group" style="width: 380px;">
                                                 <input type="text" class="form-control border border-success" name="search" placeholder="Search by Order ID, Name, or Product"
                                                     value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                                                <button class="btn btn-primary" style="font-size: 12px;" type="submit">Search</button>
+                                                <button class="btn btn-primary" style="font-size: 12px;" type="submit"><i class='bx bx-search'></i></button>
                                                 <!-- Clear Button -->
                                                 <a href="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>" class="btn btn-outline-danger" style="margin-left: 3px; border-radius: 0px 5px 5px 0px">x</a>
                                             </div>
@@ -455,7 +239,7 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                             </td>
                                         </tfoot>
                                     </table>
-                                    <?php include 'modal_pending.php'; ?>
+                                    <?php include 'modal/modal_pending.php'; ?>
                                 </div>
                             </div>
                         </div>
@@ -469,6 +253,52 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
         const sidebar = document.querySelector(".sidebar");
         toggle.addEventListener("click", () => {
             sidebar.classList.toggle("close");
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all filter options
+                document.querySelectorAll('.filter-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+
+                // Add active class to the clicked option
+                this.classList.add('active');
+
+                // Get the filter and update the URL
+                const filter = this.getAttribute('data-filter');
+                const url = new URL(window.location.href);
+                if (filter === 'All') {
+                    url.searchParams.delete('paymentStatus');
+                } else {
+                    url.searchParams.set('paymentStatus', filter);
+                }
+                window.location.href = url.href;
+            });
+        });
+
+        // Set the active filter based on the URL parameter
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentStatus = urlParams.get('paymentStatus') || 'All';
+
+            // Set the active class based on the current filter in the URL
+            document.querySelectorAll('.filter-option').forEach(option => {
+                if (option.getAttribute('data-filter') === paymentStatus) {
+                    option.classList.add('active');
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageElement = document.querySelector('.status-message');
+            if (messageElement) {
+                setTimeout(() => {
+                    messageElement.classList.add('fade-out');
+                }, 8000);
+            }
         });
     </script>
 </body>
