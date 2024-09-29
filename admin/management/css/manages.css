@@ -1,4 +1,3 @@
-/* <style> */
 .container-fluid {
     background: linear-gradient(to bottom, MediumSeaGreen, white);
     padding: 30px;
@@ -102,157 +101,96 @@ thead {
     background-color: #98FB98;
 }
 
-.payment-status-pending {
-    color: orange;
-}
-
-.payment-status-paid {
-    color: #888;
-}
-
-input[type="checkbox"] {
-    transform: scale(1.5);
-}
-
-/* </style> */
-/* <style> */
-.editbtn {
-    width: 100%;
-}
-
-.order-status-pending {
-    color: orange;
-}
-
-.order-status-processing {
+a.update-link {
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s ease;
     color: blue;
+    font-size: 13px;
 }
 
-.order-status-shipped {
-    color: #15BE2F;
+a.delete-link {
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    color: red;
+    font-size: 13px;
 }
 
-.order-status-delivered {
-    color: #888;
+.img {
+    border-radius: 6px;
+    max-width: 50px;
+    object-fit: contain;
 }
 
-/* </style> */
-/* <style> */
-/* The Modal (background overlay) */
 .modal {
     display: none;
-    /* Hidden by default */
     position: fixed;
-    /* Stay in place */
-    z-index: 1;
-    /* Sit on top */
-    left: 0;
-    top: 0;
+    z-index: 1000;
     width: 100%;
-    /* Full width */
     height: 100%;
-    /* Full height */
     overflow: auto;
-    /* Enable scroll if needed */
     background-color: rgba(0, 0, 0, 0.4);
-    /* Black with transparency */
 }
 
-/* Modal Content */
 .modal-content {
     background-color: #fefefe;
-    margin: 3% auto;
-    /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    /* Could be more or less, depending on screen size */
+    margin: auto;
     max-width: 600px;
-    /* Limit the width */
-    border-radius: 8px;
-    /* Rounded corners */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-/* Form elements inside modal */
-.modal-content h4 {
-    font-size: 24px;
-    margin-bottom: 15px;
+/* Input fields */
+label {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
 }
 
-.modal-content .form-group {
-    margin-bottom: 15px;
-}
-
-.modal-content select {
+input[type="text"],
+textarea {
     width: 100%;
-    padding: 8px;
-    border-radius: 4px;
+    padding: 7px;
     border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-i .qr {
-    font-size: 10px;
-}
-
-/* Optional: Adding responsiveness */
-@media screen and (max-width: 768px) {
-    .modal-content {
-        width: 90%;
-        /* Adjust modal width for smaller screens */
-    }
-}
-
-/* </style> */
-/* <style> */
-.row-selection {
-    display: flex;
-    justify-content: space-between;
-    /* background-color: #90EE90; */
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-}
-
-.row-selection label {
-    font-size: 13px;
-}
-
-#rowCount {
-    padding: 2px;
-    font-size: 13px;
-}
-
-/* </style> */
-/* <style> */
-.input-group .form-control {
-    border-radius: 5px 0 0 5px;
-    box-shadow: none;
-}
-
-.form-control::placeholder {
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
     font-size: 12px;
 }
 
-.input-group .btn {
-    border-radius: 0 5px 5px 0;
+/* Submit button */
+input[type="submit"] {
+    background-color: DodgerBlue;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    width: 100%;
+    margin-top: 15px;
 }
 
-.input-group .form-control:focus {
-    border-color: #28a745;
-    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-
+input[type="submit"]:hover {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
 }
 
-#clearSearch {
-    margin-left: 10px;
-    border-radius: 5px;
-}
-
-.column {
-    display: flex;
-    justify-items: start;
-    gap: 5px;
+.status-message-error {
+    background-color: #d4edda;
+    color: darkred;
+    padding: 10px;
+    border: 1px solid #c3e6cb;
+    /* border-radius: 5px; */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    transition: opacity 0.5s ease-out;
 }
 
 /* </style> */
@@ -275,4 +213,12 @@ i .qr {
 
 .status-message.fade-out {
     opacity: 0;
+}
+
+.tools {
+    display: flex;
+}
+
+.tools button {
+    border: none;
 }

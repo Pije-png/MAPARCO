@@ -178,7 +178,7 @@ $shipped_count = $shipped_count_result->fetch_assoc()['shipped_count'];
                                         <thead>
                                             <tr class="fw-bold fs-5 bg bg-success text-light">
                                                 <!-- <th></th> -->
-                                                <th colspan="8">Shipped
+                                                <th colspan="9">Shipping
                                                     <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo htmlspecialchars($shipped_count); ?></span>
                                                 </th>
 
@@ -193,6 +193,7 @@ $shipped_count = $shipped_count_result->fetch_assoc()['shipped_count'];
                                                 <th>Name</th>
                                                 <th>Product</th>
                                                 <th>Order Date</th>
+                                                <th>Quantity</th>
                                                 <th>Total Amount</th>
                                                 <th>Order Status</th>
                                                 <th>Payment Status</th>
@@ -214,7 +215,8 @@ $shipped_count = $shipped_count_result->fetch_assoc()['shipped_count'];
                                                     echo "<td>" . htmlspecialchars($row["CustomerName"]) . "</td>";
                                                     echo "<td>" . htmlspecialchars($row["ProductName"]) . "</td>"; // Display the product name
                                                     echo "<td>" . date("F j, Y", strtotime($row["OrderDate"])) . "</td>";
-                                                    echo "<td class='TotalAmount'>₱" . htmlspecialchars($row["TotalAmount"]) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row["Quantity"]) . "</td>";
+                                                    echo "<td class='TotalAmount text-danger'>₱" . htmlspecialchars($row["TotalAmount"]) . "</td>";
                                                     echo "<td class='order-status-" . strtolower(str_replace(' ', '-', $row["OrderStatus"])) . "'>" . htmlspecialchars($row["OrderStatus"]) . "</td>";
                                                     echo "<td class='payment-status-" . strtolower(str_replace(' ', '-', $row["PaymentStatus"])) . "'>" . htmlspecialchars($row["PaymentStatus"]) . "</td>";
 
@@ -228,12 +230,15 @@ $shipped_count = $shipped_count_result->fetch_assoc()['shipped_count'];
                                                     echo "</tr>";
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='10'>No orders found</td></tr>";
+                                                echo "<tr><td colspan='10'>
+                                                <img src='mr3.png' alt='No cancelled orders' style='width:300px; height:auto;'>
+                                                 <h3>No orders found.</h3>
+                                                </td></tr>";
                                             }
                                             ?>
                                         </tbody>
                                         <tfoot class="bg bg-light">
-                                            <td colspan="8"></td>
+                                            <td colspan="9"></td>
                                             <td colspan="2" class="text-center p-0 fs-6">
                                                 <button type="button" id="clearCheckboxes" class="btn btn-outline-basic btn-sm">Clear</button>
                                             </td>

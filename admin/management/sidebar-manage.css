@@ -259,7 +259,6 @@ header .image-text .header-text {
 /* ===== Dashboard===== */
 .home {
     position: relative;
-    height: 100vh;
     left: 200px;
     width: calc(100% - 200px);
     transition: var(--tran-05);

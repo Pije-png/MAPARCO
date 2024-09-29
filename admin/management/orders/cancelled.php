@@ -184,9 +184,9 @@ $cancelled_count = $result->num_rows;
                         } else {
                             // Display placeholder image when no cancelled orders
                             echo '<div class="text-center">';
-                            echo '<img src="hello.png" alt="No cancelled orders" style="width:300px; height:auto;">';
-                            echo '<p>No cancelled orders found.</p>';
-                            echo '</div>';
+                            echo '<img src="mr3.png" alt="No cancelled orders" style="width:300px; height:auto;">';
+                            echo ' <h3>No orders found.</h3>';
+                            echo '</div>';  
                         }
                         ?>
 
