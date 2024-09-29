@@ -60,16 +60,6 @@ if (isset($_GET['sortBy'])) {
 
 $paymentStatus = isset($_GET['paymentStatus']) ? $_GET['paymentStatus'] : 'All';
 
-// Get current page number from the query parameter (default to 1 if not set)
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page < 1) {
-    $page = 1;
-}
-
-// Calculate the offset for the query
-$offset = ($page - 1) * $rowCount;
-
-// Add the LIMIT and OFFSET to your SQL query
 $sql = "SELECT o.*, a.FullName AS CustomerName, a.Description, a.HouseNo, a.Street, a.Barangay, a.City, a.Province, a.ZipCode, 
         p.ProductName, oi.Quantity, oi.Subtotal 
         FROM orders o 
@@ -94,21 +84,8 @@ if (!empty($search)) {
                   OR p.ProductName LIKE '%$search%')";
 }
 
-// Add sorting and limit for pagination
-$sql .= " ORDER BY $sortField $sortOrder 
-          LIMIT $rowCount OFFSET $offset";
-
-$result = $conn->query($sql);
-
-// Fetch total number of pending orders for pagination
-$total_rows_sql = "SELECT COUNT(*) AS total_count 
-                   FROM orders o 
-                   WHERE o.OrderStatus = 'Pending'";
-$total_rows_result = $conn->query($total_rows_sql);
-$total_rows = $total_rows_result->fetch_assoc()['total_count'];
-
-// Calculate total pages
-$total_pages = ceil($total_rows / $rowCount);
+$sql .= " ORDER BY $sortField $sortOrder
+          LIMIT $rowCount";
 
 $result = $conn->query($sql);
 $pending_count_sql = "SELECT COUNT(*) AS pending_count FROM orders WHERE OrderStatus = 'Pending'";
@@ -128,189 +105,6 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <link rel="icon" href="img/MAPARCO.png" />
     <link rel="stylesheet" href="css/orders.css">
     <title>Orders</title>
-<<<<<<< HEAD
-=======
-    <style>
-        .admin-dashboard {
-            width: 100%;
-            border-collapse: collapse;
-            /* margin-bottom: 0; */
-        }
-
-        table {
-            border-collapse: collapse;
-
-        }
-
-        table tr,
-        table th {
-            font-size: 12px;
-            border: 1px solid #999;
-            padding: 5px;
-        }
-
-        table td {
-            font-size: 12px;
-            border: 1px solid #999;
-            padding: 5px;
-        }
-
-        thead {
-            background-color: #98FB98;
-        }
-
-        .payment-status-pending {
-            color: orange;
-        }
-
-        .payment-status-paid {
-            color: #888;
-        }
-
-        input[type="checkbox"] {
-            transform: scale(1.5);
-        }
-    </style>
-    <style>
-        .editbtn {
-            width: 100%;
-        }
-
-        .order-status-pending {
-            color: orange;
-        }
-
-        .order-status-processing {
-            color: blue;
-        }
-
-        .order-status-shipped {
-            color: #15BE2F;
-        }
-
-        .order-status-delivered {
-            color: #888;
-        }
-    </style>
-    <!-- modal -->
-    <style>
-        /* The Modal (background overlay) */
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black with transparency */
-        }
-
-        /* Modal Content */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 3% auto;
-            /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            /* Could be more or less, depending on screen size */
-            max-width: 600px;
-            /* Limit the width */
-            border-radius: 8px;
-            /* Rounded corners */
-        }
-
-        /* Form elements inside modal */
-        .modal-content h4 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .modal-content .form-group {
-            margin-bottom: 15px;
-        }
-
-        .modal-content select {
-            width: 100%;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        i .qr {
-            font-size: 10px;
-        }
-
-        /* Optional: Adding responsiveness */
-        @media screen and (max-width: 768px) {
-            .modal-content {
-                width: 90%;
-                /* Adjust modal width for smaller screens */
-            }
-        }
-    </style>
-    <style>
-        .row-selection {
-            display: flex;
-            justify-content: space-between;
-            /* background-color: #90EE90; */
-            padding-top: 5px;
-            padding-bottom: 5px;
-            margin-bottom: 5px;
-        }
-
-        .row-selection label {
-            font-size: 13px;
-        }
-
-        #rowCount {
-            padding: 2px;
-            font-size: 13px;
-        }
-    </style>
-    <style>
-        .input-group .form-control {
-            border-radius: 5px 0 0 5px;
-            box-shadow: none;
-        }
-
-        .form-control::placeholder {
-            font-size: 12px;
-        }
-
-        .input-group .btn {
-            border-radius: 0 5px 5px 0;
-        }
-
-        .input-group .form-control:focus {
-            border-color: #28a745;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-
-        }
-
-        #clearSearch {
-            margin-left: 10px;
-            border-radius: 5px;
-        }
-
-        .column {
-            display: flex;
-            justify-items: start;
-            gap: 5px;
-        }
-    </style>
-
->>>>>>> a1d007be54774974ed39cbddb404101035d679a8
 </head>
 
 <body class="bg bg-light">
@@ -326,47 +120,9 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                         <p class="pending-header text-center h4 fw-bold text-light" style="font-style: italic; font-family: cursive; "><i class="fa-solid fa-fire"></i> List of Pending</p>
                         <div class="arrow right"></div>
                     </div>
-<<<<<<< HEAD
                     <div class="text-white column pb-3 justify-content-center">
                         <div class="col-auto">
                             <div class="filter-option" data-filter="All">All</div>
-=======
-                </div>
-                <div class="orders-table-container">
-                    <div class="header-container pb-5">
-                        <div class="row-selection p-1">
-                            <div class="column">
-                                <form method="get" action="">
-                                    <label for="rowCount">Number of rows:</label>
-                                    <select id="rowCount" name="rowCount" onchange="this.form.submit()">
-                                        <option value="5" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '5') echo 'selected'; ?>>5</option>
-                                        <option value="10" <?php if (!isset($_GET['rowCount']) || $_GET['rowCount'] == '10') echo 'selected'; ?>>10</option>
-                                        <option value="25" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '25') echo 'selected'; ?>>25</option>
-                                        <option value="50" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '50') echo 'selected'; ?>>50</option>
-                                        <option value="100" <?php if (isset($_GET['rowCount']) && $_GET['rowCount'] == '100') echo 'selected'; ?>>100</option>
-                                    </select>
-                                </form>
-                                <form method="get" action="">
-                                    <div class="input-group">
-                                        <select name="sortBy" style="font-size: 13px; padding: 2px" onchange="this.form.submit()">
-                                            <option value="newest" <?php if (!isset($_GET['sortBy']) || $_GET['sortBy'] == 'newest') echo 'selected'; ?>>Newest</option>
-                                            <option value="oldest" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'oldest') echo 'selected'; ?>>Oldest</option>
-                                            <option value="name" <?php if (isset($_GET['sortBy']) && $_GET['sortBy'] == 'name') echo 'selected'; ?>>By Name</option>
-                                        </select>
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- Search Form -->
-                            <form method="get" action="" class="d-flex justify-content-center">
-                                <div class="input-group" style="width: 380px;">
-                                    <input type="text" class="form-control border border-success" name="search" placeholder="Search by Order ID, Name, or Product"
-                                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                                    <button class="btn btn-primary" style="font-size: 12px;" type="submit">Search</button>
-                                    <!-- Clear Button -->
-                                    <a href="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>" class="btn btn-outline-danger rounded-0" style="margin-left: 3px">x</a>
-                                </div>
-                            </form>
->>>>>>> a1d007be54774974ed39cbddb404101035d679a8
                         </div>
                         <div class="col-auto">
                             <div class="filter-option" data-filter="Paid">Paid</div>
@@ -375,7 +131,6 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                             <div class="filter-option" data-filter="Not Paid">Not Paid</div>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body">
                             <div class="status-messages">
@@ -407,7 +162,6 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                                 </div>
                                             </form>
                                         </div>
-
                                         <!-- Search Form -->
                                         <form method="get" action="" class="d-flex justify-content-center">
                                             <div class="input-group" style="width: 380px;">
@@ -478,56 +232,22 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
                                             } else {
                                                 echo "<tr><td colspan='10'>
                                                 <img src='mr3.png' alt='No cancelled orders' style='width:300px; height:auto;'>
-                                                <h3>No orders.</h3>
+                                                <h3>No orders found.</h3>
                                                 </td></tr>";
                                             }
                                             ?>
                                         </tbody>
                                         <tfoot class="bg bg-light">
-                                            <td colspan="9">
-
-                                            </td>
+                                            <td colspan="9"></td>
                                             <td colspan="2" class="text-center p-0 fs-6">
                                                 <button type="button" id="clearCheckboxes" class="btn btn-outline-basic btn-sm">Clear</button>
                                             </td>
                                         </tfoot>
-
                                     </table>
                                     <?php include 'modal/modal_pending.php'; ?>
-
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="pagination d-flex pt-2" style="justify-content:center">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination" style="margin: 0; padding: 0;">
-                                <!-- Previous Button -->
-                                <li class="page-item <?php if ($page <= 1) echo 'disabled'; ?>">
-                                    <a class="page-link" href="?page=<?php echo $page - 1; ?>&rowCount=<?php echo $rowCount; ?>&sortBy=<?php echo $sortField; ?>&search=<?php echo $search; ?>" aria-label="Previous" style="padding: 0.25rem 1.5rem; font-size: 12px;">
-                                        <span aria-hidden="true">
-                                            &laquo; Previous
-                                        </span>
-                                    </a>
-                                </li>
-                                <!-- Page Number Links -->
-                                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                                    <li class="page-item <?php if ($page == $i) echo 'active'; ?>">
-                                        <a class="page-link" href="?page=<?php echo $i; ?>&rowCount=<?php echo $rowCount; ?>&sortBy=<?php echo $sortField; ?>&search=<?php echo $search; ?>" style="padding: 0.25rem 1.5rem; font-size: 12px;">
-                                            <?php echo $i; ?>
-                                        </a>
-                                    </li>
-                                <?php endfor; ?>
-                                <!-- Next Button -->
-                                <li class="page-item <?php if ($page >= $total_pages) echo 'disabled'; ?>">
-                                    <a class="page-link" href="?page=<?php echo $page + 1; ?>&rowCount=<?php echo $rowCount; ?>&sortBy=<?php echo $sortField; ?>&search=<?php echo $search; ?>" aria-label="Next" style="padding: 0.25rem 1.5rem; font-size: 12px;">
-                                        <span aria-hidden="true">
-                                            Next &raquo;
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>
