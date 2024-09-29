@@ -60,6 +60,16 @@ if (isset($_GET['sortBy'])) {
 
 $paymentStatus = isset($_GET['paymentStatus']) ? $_GET['paymentStatus'] : 'All';
 
+// Get current page number from the query parameter (default to 1 if not set)
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) {
+    $page = 1;
+}
+
+// Calculate the offset for the query
+$offset = ($page - 1) * $rowCount;
+
+// Add the LIMIT and OFFSET to your SQL query
 $sql = "SELECT o.*, a.FullName AS CustomerName, a.Description, a.HouseNo, a.Street, a.Barangay, a.City, a.Province, a.ZipCode, 
         p.ProductName, oi.Quantity, oi.Subtotal 
         FROM orders o 
@@ -84,8 +94,21 @@ if (!empty($search)) {
                   OR p.ProductName LIKE '%$search%')";
 }
 
-$sql .= " ORDER BY $sortField $sortOrder
-          LIMIT $rowCount";
+// Add sorting and limit for pagination
+$sql .= " ORDER BY $sortField $sortOrder 
+          LIMIT $rowCount OFFSET $offset";
+
+$result = $conn->query($sql);
+
+// Fetch total number of delivered orders for pagination
+$total_rows_sql = "SELECT COUNT(*) AS total_count 
+                   FROM orders o 
+                   WHERE o.OrderStatus = 'delivered'";
+$total_rows_result = $conn->query($total_rows_sql);
+$total_rows = $total_rows_result->fetch_assoc()['total_count'];
+
+// Calculate total pages
+$total_pages = ceil($total_rows / $rowCount);
 
 $result = $conn->query($sql);
 $delivered_count_sql = "SELECT COUNT(*) AS delivered_count FROM orders WHERE OrderStatus = 'delivered'";
@@ -232,7 +255,7 @@ $delivered_count = $delivered_count_result->fetch_assoc()['delivered_count'];
                                             } else {
                                                 echo "<tr><td colspan='10'>
                                                 <img src='mr3.png' alt='No cancelled orders' style='width:300px; height:auto;'>
-                                                 <h3>No orders found.</h3>
+                                                 <h3>No orders.</h3>
                                                 </td></tr>";
                                             }
                                             ?>
@@ -248,6 +271,36 @@ $delivered_count = $delivered_count_result->fetch_assoc()['delivered_count'];
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="pagination d-flex pt-2" style="justify-content:center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination" style="margin: 0; padding: 0;">
+                                <!-- Previous Button -->
+                                <li class="page-item <?php if ($page <= 1) echo 'disabled'; ?>">
+                                    <a class="page-link" href="?page=<?php echo $page - 1; ?>&rowCount=<?php echo $rowCount; ?>&sortBy=<?php echo $sortField; ?>&search=<?php echo $search; ?>" aria-label="Previous" style="padding: 0.25rem 1.5rem; font-size: 12px;">
+                                        <span aria-hidden="true">
+                                            &laquo; Previous
+                                        </span>
+                                    </a>
+                                </li>
+                                <!-- Page Number Links -->
+                                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                    <li class="page-item <?php if ($page == $i) echo 'active'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $i; ?>&rowCount=<?php echo $rowCount; ?>&sortBy=<?php echo $sortField; ?>&search=<?php echo $search; ?>" style="padding: 0.25rem 1.5rem; font-size: 12px;">
+                                            <?php echo $i; ?>
+                                        </a>
+                                    </li>
+                                <?php endfor; ?>
+                                <!-- Next Button -->
+                                <li class="page-item <?php if ($page >= $total_pages) echo 'disabled'; ?>">
+                                    <a class="page-link" href="?page=<?php echo $page + 1; ?>&rowCount=<?php echo $rowCount; ?>&sortBy=<?php echo $sortField; ?>&search=<?php echo $search; ?>" aria-label="Next" style="padding: 0.25rem 1.5rem; font-size: 12px;">
+                                        <span aria-hidden="true">
+                                            Next &raquo;
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
     </section>

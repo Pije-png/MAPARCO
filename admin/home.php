@@ -191,6 +191,18 @@ $product_count = $result->num_rows;
             padding-left: 15px !important;
             margin-left: 15px !important;
         }
+
+        #logoutLink {
+            transition: background-color 0.3s, color 0.3s;
+            color: #dc3545;
+        }
+
+        /* Hover styles */
+        #logoutLink:hover {
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+        }
     </style>
 
 </head>
@@ -203,17 +215,24 @@ $product_count = $result->num_rows;
         <div class="container-fluid">
             <!-- Tab Navigation Menu -->
             <div class="tab-header">
-                <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">
-                            <h5>Dashboard</h5>
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-controls="inventory" aria-selected="false">
-                            <h5>Inventory</h5>
-                        </button>
-                    </li>
+                <ul class="nav nav-tabs d-flex justify-content-between w-100" id="dashboardTabs" role="tablist">
+                    <div class="d-flex">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">
+                                <h5>Dashboard</h5>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-controls="inventory" aria-selected="false">
+                                <h5>Inventory</h5>
+                            </button>
+                        </li>
+                    </div>
+                    <div class="nav-item pe-2">
+    <a href="../logout.php" class="nav-link border border-danger rounded pt-2 pb-0" id="logoutLink">
+        <h6><i class='bx bx-log-out icon'></i> Logout</h6>
+    </a>
+</div>
                 </ul>
             </div>
 
@@ -381,7 +400,7 @@ $product_count = $result->num_rows;
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-4">
                                     <div class="card text-white bg-success sm-3">
                                         <div class="card-body">

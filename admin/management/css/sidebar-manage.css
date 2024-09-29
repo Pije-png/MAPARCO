@@ -245,41 +245,6 @@ header .image-text .header-text {
     justify-content: space-between;
 }
 
-/* ====== */
-.sidebar.close~.home {
-    left: 70px;
-    width: calc(100% - 70px);
-}
-
-.sidebar.close~.nav-home {
-    left: 70px;
-    width: calc(100% - 70px);
-}
-
-/* ===== Dashboard===== */
-.home {
-    position: relative;
-    left: 200px;
-    width: calc(100% - 200px);
-    transition: var(--tran-05);
-    background: var(--body-color);
-}
-
-.nav-home {
-    position: relative;
-    left: 250px;
-    width: calc(100% - 250px);
-    transition: var(--tran-05);
-    background: var(--body-color);
-}
-
-.home .text {
-    font-size: 30px;
-    font-weight: 500;
-    color: var(--text-color);
-    padding: 8px 14px;
-}
-
 .smol {
     font-weight: 500;
     border-radius: 30px;
