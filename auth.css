@@ -1,0 +1,138 @@
+/* <style> */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(232, 247, 232);
+}
+
+.card {
+    width: 400px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card img {
+    display: block;
+    margin: 0 auto 10px auto;
+    width: 100px;
+}
+
+.card h5 {
+    text-align: center;
+    margin-top: 0;
+    font-weight: bold;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: transparent;
+}
+
+.form-group label {
+    font-size: 11px;
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-size: 1rem;
+    color: #777;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #008000;
+}
+
+.form-group input:focus+label,
+.form-group input:not(:placeholder-shown)+label {
+    top: -12px;
+    left: 10px;
+    font-size: 12px;
+    /* color: #008000; */
+    color: #333;
+    background-color: #fff;
+    padding: 0 5px;
+    border: 1px solid #777;
+    border-radius: 3px;
+}
+
+.login-btn {
+    width: 100%;
+}
+
+.register-btn {
+    width: 100%;
+}
+
+.forgot {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.forgot a {
+    color: #008000;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.forgot a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.login {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.login a {
+    color: #008000;
+    text-decoration: none;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
+.register {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.register a {
+    color: #008000;
+    text-decoration: none;
+}
+
+.register a:hover {
+    text-decoration: underline;
+}
+
+/* </style> */
