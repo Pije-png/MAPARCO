@@ -64,7 +64,7 @@ $conn->close();
 <body>
     <div class="container">
         <div class="card register">
-            <div class="text-center mb-2">
+            <div class="text-center mb-2">  
                 <img src="img/MAPARCO.png" alt="Logo">
                 <h5 class="text-primary">Create an Account</h5>
             </div>
