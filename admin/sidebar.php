@@ -119,14 +119,14 @@
                     </li>
                 </ul>
             </div>
-            <div class="bottom-content">
+            <!-- <div class="bottom-content">
                 <li class="nav-link">
                     <a href="../logout.php">
                         <i class='bx bx-log-out icon'></i>
                         <span class="nav-text text">Logout</span>
                     </a>
                 </li>
-            </div>
+            </div> -->
         </div>
 
         <div class="modal fade" tabindex="-1" id="logoutConfirmationModal">

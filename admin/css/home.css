@@ -149,3 +149,75 @@ table td {
 thead {
     background-color: #98FB98;
 }
+
+/* <style> */
+.tab-header {
+    background-color: #f7f7f7;
+    padding-top: 30px;
+    margin-bottom: 20px;
+}
+
+.tab-header .nav-link {
+    color: green;
+}
+
+.tab-header .nav-link:hover {
+    color: green;
+}
+
+/* Override the left padding or margin for .home */
+.tab-header {
+    padding-left: 20px !important;
+    margin-left: 20px !important;
+}
+
+.margin-left {
+    padding-left: 15px !important;
+    margin-left: 15px !important;
+}
+
+#logout-tab {
+    transition: background-color 0.3s, color 0.3s;
+    color: #dc3545;
+}
+
+/* Hover styles */
+#logout-tab:hover {
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+}
+
+/* </style><style> */
+.confirmation-dialog {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 9999;
+    width: 300px;
+}
+
+.rel {
+    position: relative;
+    /* justify-content: space-between; */
+}
+
+.rel h6 {
+    margin-top: 0;
+    font-size: 14px;
+}
+
+.confirmation-dialog button {
+    margin-top: 10px;
+    padding: 8px 25px;
+    font-size: 14px;
+    width: 48%;
+}
+
+/* </style> */

@@ -1,6 +1,30 @@
 <?php
 include('../connection.php');
 
+function redirectToLogin()
+{
+    header("Location: ../login.php");
+    exit;
+}
+
+// Perform the logout operation when a request is made to log out
+if (isset($_POST['confirmLogout'])) {
+    if (isset($_SESSION['admin_id'])) {
+        // Unset all of the session variables
+        $_SESSION = array();
+        // Destroy the session for the admin
+        session_destroy();
+        // Redirect to login page
+        redirectToLogin();
+    } elseif (isset($_SESSION['customer_id'])) {
+        // Unset all of the session variables
+        $_SESSION = array();
+        // Destroy the session for the customer
+        session_destroy();
+        // Redirect to login page
+        redirectToLogin();
+    }
+}
 // Capture start and end date from the form (default to January 1st of the current year to today if not set)
 $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : date('Y-01-01');
 $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : date('Y-m-d');
@@ -164,47 +188,8 @@ $product_count = $result->num_rows;
     <title>Ecommerce Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/styless.css">
+    <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        .tab-header {
-            background-color: #f7f7f7;
-            padding-top: 30px;
-            margin-bottom: 20px;
-        }
-
-        .tab-header .nav-link {
-            color: green;
-        }
-
-        .tab-header .nav-link:hover {
-            color: green;
-        }
-
-        /* Override the left padding or margin for .home */
-        .tab-header {
-            padding-left: 20px !important;
-            margin-left: 20px !important;
-        }
-
-        .margin-left {
-            padding-left: 15px !important;
-            margin-left: 15px !important;
-        }
-
-        #logoutLink {
-            transition: background-color 0.3s, color 0.3s;
-            color: #dc3545;
-        }
-
-        /* Hover styles */
-        #logoutLink:hover {
-            background-color: #dc3545;
-            color: white;
-            text-decoration: none;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -228,14 +213,26 @@ $product_count = $result->num_rows;
                             </button>
                         </li>
                     </div>
-                    <div class="nav-item pe-2">
-    <a href="../logout.php" class="nav-link border border-danger rounded pt-2 pb-0" id="logoutLink">
-        <h6><i class='bx bx-log-out icon'></i> Logout</h6>
-    </a>
-</div>
+                    <div class="nav-item pe-2" role="presentation">
+                        <button class="nav-link border border-danger rounded pt-2 pb-0" id="logout-tab" type="button">
+                            <h6><i class='bx bx-log-out icon'></i> Logout</h6>
+                        </button>
+                    </div>
                 </ul>
             </div>
 
+            <!-- Logout Confirmation Card -->
+            <div class="confirmation-dialog" id="logoutConfirmationCard">
+                <p class=" fw-bold fs-6">Log out?</p>
+                <div class="rel">
+                    <h6>Are you sure you want to log out?</h6>
+                    <form id="logoutForm" method="POST">
+                        <button type="button" id="confirmLogout" class="btn btn-danger btn btn-sm">Yes</button>
+                        <button type="button" id="cancelLogout" class="btn btn-outline-secondary btn-sm">No</button>
+                        <input type="hidden" name="confirmLogout" value="1">
+                    </form>
+                </div>
+            </div>
             <div class="margin-left">
                 <!-- Tab Content -->
                 <div class="tab-content" id="dashboardTabContent">
@@ -492,7 +489,25 @@ $product_count = $result->num_rows;
     </section>
 
     <?php include 'chart.php'; ?>
+    <script>
+        // Ensure DOM is fully loaded before running the script
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show the confirmation card when the logout button is clicked
+            document.getElementById("logout-tab").addEventListener("click", function() {
+                document.getElementById("logoutConfirmationCard").style.display = "block";
+            });
 
+            // Hide the confirmation card if "Cancel" is clicked
+            document.getElementById("cancelLogout").addEventListener("click", function() {
+                document.getElementById("logoutConfirmationCard").style.display = "none";
+            });
+
+            // When the "Yes" button is clicked, submit the form to log out
+            document.getElementById("confirmLogout").addEventListener("click", function() {
+                document.getElementById("logoutForm").submit();
+            });
+        });
+    </script>
 </body>
 
 </html>
