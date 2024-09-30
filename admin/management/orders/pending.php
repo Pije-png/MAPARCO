@@ -128,6 +128,11 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <link rel="icon" href="img/MAPARCO.png" />
     <link rel="stylesheet" href="css/orders.css">
     <title>Orders</title>
+    <style>
+        tbody tr:nth-child(even) {
+            background-color: #fff;
+        }
+    </style>
 </head>
 
 <body class="bg bg-light">
