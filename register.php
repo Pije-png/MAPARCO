@@ -57,35 +57,48 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="ati.css">
     <title>Customer Registration</title>
 </head>
 
 <body>
     <div class="container">
         <div class="card register">
-            <div class="text-center mb-2">  
+            <div class="text-center mb-2">
                 <img src="img/MAPARCO.png" alt="Logo">
                 <h5 class="text-primary">Create an Account</h5>
             </div>
 
             <form action="register.php" method="POST">
                 <div class="form-group">
+                    <span class="input-icon">
+                        <i class="fas fa-user"></i>
+                    </span>
                     <input type="text" id="name" name="name" placeholder=" " required>
                     <label for="name">Full Name</label>
                 </div>
 
                 <div class="form-group">
+                    <span class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                    </span>
                     <input type="email" id="email" name="email" placeholder=" " required>
                     <label for="email">Email address</label>
                 </div>
 
                 <div class="form-group">
+                    <span class="input-icon">
+                        <i class="fas fa-lock"></i>
+                    </span>
                     <input type="password" id="password" name="password" minlength="8" placeholder=" " required>
                     <label for="password">Password</label>
                 </div>
 
                 <div class="form-group">
+                    <span class="input-icon">
+                        <i class="fas fa-key"></i>
+                    </span>
                     <input type="password" id="confirm_password" name="confirm_password" minlength="8" placeholder=" " required>
                     <label for="confirm_password">Confirm Password</label>
                 </div>

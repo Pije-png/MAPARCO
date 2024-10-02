@@ -9,7 +9,7 @@ if (isset($_POST['addressID']) && !empty($_POST['addressID'])) {
     if ($conn->query($sql) === TRUE) {
         // Address deleted successfully
         // Redirect to the addresses page or perform any other action as needed
-        header("Location: address.php");
+        header("Location: ../address.php");
         exit();
     } else {
         // Error occurred while deleting the address
@@ -17,6 +17,6 @@ if (isset($_POST['addressID']) && !empty($_POST['addressID'])) {
     }
 } else {
     // Redirect or display an error message if addressID is not set or empty
-    header("Location: address.php"); // Redirect to addresses page
+    header("Location: ../address.php"); // Redirect to addresses page
     exit();
 }

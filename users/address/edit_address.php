@@ -1,5 +1,5 @@
 <?php
-include('../connection.php');
+include('../../connection.php');
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($sql) === TRUE) {
         // Address updated successfully
         // Redirect or show success message
-        header("Location: address.php");
+        header("Location: ../address.php");
         exit;
     } else {
         // Handle error

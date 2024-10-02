@@ -1,0 +1,302 @@
+/* <style> */
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Body Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 80px;
+    position: relative;
+}
+
+.address-card {
+    width: 700px;
+    margin: auto;
+    position: relative;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.address p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 12px;
+}
+
+.header h5 {
+    color: green;
+    font-weight: 500;
+}
+
+.headers {
+    display: flex;
+    justify-content: space-between;
+}
+
+.address-info p {
+    line-height: 1.2;
+}
+
+.default-label {
+    color: green;
+    border: 1px solid green;
+    padding: 0px 10px;
+    font-size: 10px;
+}
+
+.set_default {
+    border: 1px solid #ccc;
+    color: #888;
+}
+
+.address-actions .mixed {
+    position: absolute;
+    right: 10px;
+}
+
+.address-actions .mix {
+    position: absolute;
+    right: 10px;
+    padding-top: 20px;
+}
+
+.default-label {
+    font-size: 12px;
+}
+
+.address .set_default {
+    font-size: 12px;
+}
+
+.address .edit-address,
+.address a {
+    font-size: 12px;
+}
+
+.address-actions a {
+    text-decoration: none;
+    color: red;
+}
+
+.edit-address {
+    background: none;
+    border: 0;
+    color: #08f;
+    outline: none;
+    white-space: nowrap;
+}
+
+/* </style> */
+/* <style> */
+/* Modal CSS */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 450px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.modal-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    color: #333;
+    margin: 0;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 0px;
+}
+
+#createProductModal .modal-content input[type="text"] {
+    width: calc(100% - 12px);
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+#editForm .modal-content input[type="text"] {
+    width: calc(100% - 12px);
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.modal-footer {
+    text-align: right;
+}
+
+.modal-footer button {
+    padding: 10px 20px !important;
+    background-color: #ee4d2d !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer button:hover {
+    background-color: #d63a1e !important;
+}
+
+.modal-content #saveEdit {
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content #saveEdit:hover {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.9);
+}
+
+.close-modal {
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: lightcoral;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    background-color: #fffefb;
+    border-radius: 2px;
+    display: flex;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.modal-header h5 {
+    color: #888;
+    font-weight: 700;
+    margin: 0;
+}
+
+.right-content {
+    position: absolute;
+    right: 20px;
+}
+
+.modal-content .form-group label {
+    display: block;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 10px;
+}
+
+.address-container button:hover {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content .form-group {
+    margin-bottom: .5rem;
+}
+
+.modal-content .form-check {
+    margin-top: .5rem;
+}
+
+.modal-content .footer {
+    margin-top: 1rem;
+}
+
+.modal-content .footer .form-group {
+    margin-bottom: 0;
+}
+
+/* </style> */
+/* <style> */
+@media (max-width: 510px) {
+
+    .header button {
+        font-size: 10px;
+    }
+
+    .address h6 {
+        font-size: 13px;
+    }
+
+    .address p {
+        font-size: 11px;
+    }
+
+    .default-label {
+        font-size: 11px;
+    }
+
+    .address .set_default {
+        font-size: 11px;
+    }
+
+    .address .edit-address,
+    .address a {
+        font-size: 11px;
+    }
+
+    .address-actions .mixed {
+        position: absolute;
+        right: 5px;
+    }
+
+    .address-card {
+        min-height: 420px;
+    }
+
+    .modal-content.create {
+        margin-top: 0px;
+    }
+}
+
+/* </style> */

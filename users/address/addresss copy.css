@@ -1,61 +1,30 @@
-.header {
+/* <style> */
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Body Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.header h5 {
-    color: green;
-    font-weight: 500;
-    margin: 0;
-    margin-bottom: 20px;
-}
-
-.header .btn {
-    background-color: #04AA6D;
-    color: #fff;
-    padding: 0px auto;
-    text-decoration: none;
-    font-size: 13px;
-    display: block;
-    border: 2px solid #555;
-}
-
-.header .btn:hover {
-    color: #fff;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.9);
-}
-
-/* ================================================================================================================ */
-/* ================================================================================================================ */
-/* ================================================================================================================ */
-/* ================================================================================================================ */
-
-.address {
-    background-color: #fffefb;
-    padding-bottom: 20px;
+    flex-direction: row;
+    margin-top: 80px;
     position: relative;
-    padding-right: 100px;
-    padding: 20px;
-    /* border: 1px solid #15BE2F; */
-    border-radius: 10px;
-    margin-bottom: 10px;
 }
 
 .address-card {
-    background-color: #fffefb;
-    padding-bottom: 20px;
+    width: 700px;
+    margin: auto;
     position: relative;
-    padding-right: 100px;
-    padding: 20px;
-    border-radius: 5px;
-    /* border: 1px solid #ccc; */
-    max-width: 650px;
-    margin: 90px auto;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+}
 
 .address p {
     margin: 0;
@@ -63,28 +32,57 @@
     font-size: 12px;
 }
 
-.address-info {
+.header h5 {
+    color: green;
+    font-weight: 500;
+}
+
+.headers {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    width: calc(100% - 100px);
-    /* Adjust the width as needed */
 }
 
-.address-info a {
-    color: red;
+.address-info p {
+    line-height: 1.2;
 }
 
-.address-actions {
+.default-label {
+    color: green;
+    border: 1px solid green;
+    padding: 0px 10px;
+    font-size: 10px;
+}
+
+.set_default {
+    border: 1px solid #ccc;
+    color: #888;
+}
+
+.address-actions .mixed {
     position: absolute;
-    top: 10px;
     right: 10px;
-    text-align: right;
-    z-index: 1;
+}
+
+.address-actions .mix {
+    position: absolute;
+    right: 10px;
+    padding-top: 20px;
+}
+
+.default-label {
+    font-size: 12px;
+}
+
+.address .set_default {
+    font-size: 12px;
+}
+
+.address .edit-address,
+.address a {
+    font-size: 12px;
 }
 
 .address-actions a {
-    margin-left: 10px;
     text-decoration: none;
     color: red;
 }
@@ -94,37 +92,13 @@
     border: 0;
     color: #08f;
     outline: none;
-    padding: 4px;
     white-space: nowrap;
 }
 
-.address-actions button,
-.address-actions a {
-    font-size: 13px;
-}
-
-.set_default {
-    border: 1px solid #ccc;
-    color: #888;
-}
-
-.default-label {
-    color: green;
-    border: 1px solid green;
-    padding: 0px 10px;
-    font-size: 12px;
-}
-
-.back-button i {
-    color: white;
-    font-size: 25px;
-}
-
-/* ================================================================================================================ */
-/* ================================================================================================================ */
-/* ================================================================================================================ */
-
+/* </style> */
+/* <style> */
 /* Modal CSS */
+
 .modal {
     display: none;
     position: fixed;
@@ -139,7 +113,7 @@
 
 .modal-content {
     background-color: #fff;
-    margin: 90px auto;
+    margin: auto;
     padding: 20px;
     border-radius: 8px;
     max-width: 450px;
@@ -162,13 +136,11 @@
     margin-bottom: 20px;
 }
 
-/* Add CSS styles for labels */
 .modal-content label {
     display: block;
     margin-bottom: 0px;
 }
 
-/* Adjust input fields */
 #createProductModal .modal-content input[type="text"] {
     width: calc(100% - 12px);
     padding: 5px;
@@ -222,7 +194,7 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.9);
 }
 
-.close-modal{
+.close-modal {
     color: red;
     float: right;
     font-size: 28px;
@@ -238,12 +210,8 @@
     cursor: pointer;
 }
 
-/* ============================================================================================== */
-/* ============================================================================================== */
-/* ============================================================================================== */
 .modal-header {
     background-color: #fffefb;
-    /* border: 1px solid rgba(224, 168, 0, .4); */
     border-radius: 2px;
     display: flex;
     margin-bottom: 15px;
@@ -260,21 +228,6 @@
     position: absolute;
     right: 20px;
 }
-/* 
-.btn-submit {
-    width: 100%;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-}
-
-.btn-submit:hover {
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.9);
-} */
 
 .modal-content .form-group label {
     display: block;
@@ -302,3 +255,48 @@
 .modal-content .footer .form-group {
     margin-bottom: 0;
 }
+
+/* </style> */
+/* <style> */
+@media (max-width: 510px) {
+
+    .header button {
+        font-size: 10px;
+    }
+
+    .address h6 {
+        font-size: 13px;
+    }
+
+    .address p {
+        font-size: 11px;
+    }
+
+    .default-label {
+        font-size: 11px;
+    }
+
+    .address .set_default {
+        font-size: 11px;
+    }
+
+    .address .edit-address,
+    .address a {
+        font-size: 11px;
+    }
+
+    .address-actions .mixed {
+        position: absolute;
+        right: 5px;
+    }
+
+    .address-card {
+        min-height: 420px;
+    }
+
+    .modal-content.create {
+        margin-top: 0px;
+    }
+}
+
+/* </style> */

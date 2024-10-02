@@ -1,3 +1,29 @@
+<?php
+function redirectToLogin()
+{
+    header("Location: ../login.php");
+    exit;
+}
+
+// Perform the logout operation when a request is made to log out
+if (isset($_POST['confirmLogout'])) {
+    if (isset($_SESSION['admin_id'])) {
+        // Unset all of the session variables
+        $_SESSION = array();
+        // Destroy the session for the admin
+        session_destroy();
+        // Redirect to login page
+        redirectToLogin();
+    } elseif (isset($_SESSION['customer_id'])) {
+        // Unset all of the session variables
+        $_SESSION = array();
+        // Destroy the session for the customer
+        session_destroy();
+        // Redirect to login page
+        redirectToLogin();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,7 +96,7 @@
             padding: 8px 10px;
         }
 
-        .dropdown-menu li a:hover{
+        .dropdown-menu li a:hover {
             background-color: dodgerblue;
             color: #f8f9fa;
         }
@@ -96,9 +122,9 @@
             background-color: rgba(255, 255, 255, 0.2) !important;
         }
 
-        a img.logo{
-                width: 50px;
-            }
+        a img.logo {
+            width: 50px;
+        }
 
         /* Adjustments for Responsive Offcanvas */
         @media (max-width: 767.98px) {
@@ -118,20 +144,9 @@
                 /* Enable vertical scrolling */
             }
 
-            a img.logo{
+            a img.logo {
                 width: 40px;
             }
-            
-            .dropdown-menu li a {
-            color: #555;
-            padding: 8px 10px;
-            font-size:12px;
-        }
-            
-            .vr {
-                display: none;
-            }
-            
         }
 
         /* Positioning the dropdown menu to the right */
@@ -140,6 +155,91 @@
                 position: absolute;
                 right: 0;
             }
+        }
+
+        /* Back and Mini-nav Styles */
+        .back {
+            width: 100%;
+            position: relative;
+            top: 0;
+        }
+
+        .mini-nav {
+            position: fixed;
+            display: flex;
+            margin: 0px 10px;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .mini-nav a {
+            margin-right: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .dropdown-menu li a {
+            color: #555;
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+
+        .vr {
+            display: none;
+        }
+
+        .mini-nav p.product-title {
+            margin: 0;
+            font-weight: bold;
+        }
+    </style>
+    <!-- CSS for Logout Confirmation Dialog -->
+    <style>
+        #logout-tab {
+            transition: background-color 0.3s, color 0.3s;
+            color: #dc3545;
+        }
+
+        #logout-tab:hover {
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+        }
+
+        .confirmation-dialog {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 40px;
+            background-color: white;
+            padding: 15px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            z-index: 9999;
+            width: 300px;
+        }
+
+        .rel {
+            position: relative;
+        }
+
+        .rel h6 {
+            margin-top: 0;
+            font-size: 14px;
+        }
+
+        .confirmation-dialog button {
+            margin-top: 10px;
+            padding: 8px 25px;
+            font-size: 14px;
+            width: 48%;
+        }
+
+        .nav-item button {
+            width: 100%;
+            padding: 10px;
+            padding-bottom: 5px;
         }
     </style>
 </head>
@@ -188,7 +288,7 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle bg-success p-2 rounded" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-gear"></i>    
+                                <i class="fa-solid fa-gear"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end p-2">
                                 <li><a href="profile.php" class="dropdown-item"><i class="fa-solid fa-user"></i> Profile</a></li>
@@ -198,7 +298,11 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a href="../logout.php" class="dropdown-item text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                                <li class="nav-item">
+                                    <button class="nav-link" id="logout-tab" type="button">
+                                        <h6><i class="fa-solid fa-right-from-bracket"></i> Logout</h6>
+                                    </button>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -206,6 +310,39 @@
             </div>
         </div>
     </nav>
+
+    <!-- Logout Confirmation Dialog -->
+    <div class="confirmation-dialog" id="logoutConfirmationCard">
+        <p class="fw-bold fs-6">Log out?</p>
+        <div class="rel">
+            <h6>Are you sure you want to log out?</h6>
+            <form id="logoutForm" method="POST">
+                <button type="button" id="confirmLogout" class="btn btn-danger btn-sm">Yes</button>
+                <button type="button" id="cancelLogout" class="btn btn-outline-secondary btn-sm">No</button>
+                <input type="hidden" name="confirmLogout" value="1">
+            </form>
+        </div>
+    </div>
+
+    <!-- Script to handle Logout confirmation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show the confirmation dialog
+            document.getElementById("logout-tab").addEventListener("click", function() {
+                document.getElementById("logoutConfirmationCard").style.display = "block";
+            });
+
+            // Cancel logout
+            document.getElementById("cancelLogout").addEventListener("click", function() {
+                document.getElementById("logoutConfirmationCard").style.display = "none";
+            });
+
+            // Confirm logout
+            document.getElementById("confirmLogout").addEventListener("click", function() {
+                document.getElementById("logoutForm").submit();
+            });
+        });
+    </script>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
