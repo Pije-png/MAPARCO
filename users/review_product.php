@@ -5,35 +5,41 @@ include('../connection.php');
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $orderID = $_POST['order_id'];
-    $productID = $_POST['product_id'];
-    $rating = $_POST['rating'];
-    $reviewText = $_POST['review_text'];
-    $customerID = $_SESSION['customer_id']; // Ensure you have the customer ID
+    // Check if each field is set
+    $orderID = isset($_POST['order_id']) ? $_POST['order_id'] : null;
+    $productID = isset($_POST['product_id']) ? $_POST['product_id'] : null;
+    $rating = isset($_POST['rating']) ? $_POST['rating'] : null;
+    $reviewText = isset($_POST['review_text']) ? $_POST['review_text'] : null;
+    $customerID = $_SESSION['customer_id'];
 
-    // Check if a review already exists
-    $stmt = $conn->prepare("SELECT ReviewID FROM reviews WHERE OrderID = ? AND ProductID = ? AND CustomerID = ?");
-    $stmt->bind_param("iii", $orderID, $productID, $customerID);
-    $stmt->execute();
-    $stmt->store_result();
+    // Make sure required fields are not null
+    if ($orderID && $productID && $rating && $reviewText) {
+        // Check if a review already exists
+        $stmt = $conn->prepare("SELECT ReviewID FROM reviews WHERE OrderID = ? AND ProductID = ? AND CustomerID = ?");
+        $stmt->bind_param("iii", $orderID, $productID, $customerID);
+        $stmt->execute();
+        $stmt->store_result();
 
-    if ($stmt->num_rows > 0) {
-        // Update existing review
-        $stmt = $conn->prepare("UPDATE reviews SET Rating = ?, ReviewText = ? WHERE OrderID = ? AND ProductID = ? AND CustomerID = ?");
-        $stmt->bind_param("isiii", $rating, $reviewText, $orderID, $productID, $customerID);
+        if ($stmt->num_rows > 0) {
+            // Update existing review
+            $stmt = $conn->prepare("UPDATE reviews SET Rating = ?, ReviewText = ? WHERE OrderID = ? AND ProductID = ? AND CustomerID = ?");
+            $stmt->bind_param("isiii", $rating, $reviewText, $orderID, $productID, $customerID);
+        } else {
+            // Insert new review
+            $stmt = $conn->prepare("INSERT INTO reviews (OrderID, ProductID, CustomerID, Rating, ReviewText) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("iiiss", $orderID, $productID , $customerID, $rating, $reviewText);
+        }
+
+        if ($stmt->execute()) {
+            $success = 'Review saved successfully.';
+        } else {
+            $error = 'Error saving review. Please try again.';
+        }
+
+        $stmt->close();
     } else {
-        // Insert new review
-        $stmt = $conn->prepare("INSERT INTO reviews (OrderID, ProductID, CustomerID, Rating, ReviewText) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("iiiss", $orderID, $productID, $customerID, $rating, $reviewText);
+        $error = 'All fields are required.';
     }
-
-    if ($stmt->execute()) {
-        $success = 'Review saved successfully.';
-    } else {
-        $error = 'Error saving review. Please try again.';
-    }
-
-    $stmt->close();
 }
 
 // Fetch user orders from the database
@@ -91,7 +97,7 @@ $conn->close();
         }
 
         .buy-container {
-            margin: 80px auto;
+            margin: 70px auto;
         }
 
         .container {
@@ -160,7 +166,8 @@ $conn->close();
             margin-top: 10px;
             width: 100%;
         }
-        @media (max-width: 510px) {
+
+        @media (max-width: 510px) {}
     </style>
 </head>
 
@@ -180,10 +187,10 @@ $conn->close();
             <?php endif; ?>
 
             <h4 class="fw-bold text-success mb-2">Review Orders</h4>
-            <div class="card-con header-container">
+            <div class="card header-container">
                 <div class="orders-container">
                     <?php if (empty($nonReviewedOrders)) : ?>
-                        <p>No products to review.</p>
+                        <img src='users/mr3.png' alt='No cancelled orders' style='width:250px; height:auto;'>
                     <?php else : ?>
                         <?php foreach ($nonReviewedOrders as $order) : ?>
                             <div class="order-card">
@@ -204,10 +211,10 @@ $conn->close();
             </div>
 
             <h4 class="fw-bold text-success mb-2">Reviewed Products</h4>
-            <div class="card-con">
+            <div class="card">
                 <div class="orders-container">
                     <?php if (empty($reviews)) : ?>
-                        <p>No reviewed products found.</p>
+                        <h5 class="text-center">No products to review.</h5>
                     <?php else : ?>
                         <?php foreach ($reviews as $review) : ?>
                             <div class="order-card">

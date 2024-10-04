@@ -63,11 +63,11 @@ $admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator'); // 
 </head>
 
 <body>
-    <!-- <header class="heade">
+    <header class="heade">
         <div class="profile-info pt-2 p-1">
             <img src="<?= $admin_photo ?>" alt="Profile Photo" class="profile-photo">
         </div>
-    </header> -->
+    </header>
 </body>
 
 </html>

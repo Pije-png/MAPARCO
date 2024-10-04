@@ -196,7 +196,7 @@ if (isset($_POST['confirmLogout'])) {
         #logout-tab {
             transition: background-color 0.3s, color 0.3s;
             color: #dc3545;
-            
+
         }
 
         #logout-tab:hover {

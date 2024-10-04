@@ -164,9 +164,16 @@ $conn->close();
             </div> -->
             <?php if (empty($orders)) : ?>
                 <!-- Display message if no orders found -->
-                <div class="text-center mt-3">
-                    <p>No history found.</p>
-                </div>
+                <table class="table mt-1">
+                    <tr>
+                        <td>
+                            <div class="text-center mt-3">
+                                <img src='users/mr3.png' alt='No cancelled orders' style='width:300px; height:auto;'>
+                                <h3>Orders is Empty.</h3>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             <?php else : ?>
                 <!-- Display table if orders are found -->
                 <div style="overflow-x:auto;" class="table-container col-12">

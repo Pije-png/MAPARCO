@@ -1,29 +1,16 @@
 <?php
-function redirectToLogin()
-{
-    header("Location: ../login.php");
-    exit;
-}
+// Fetch profile picture
+$query = "SELECT ProfilePicFilename FROM customers WHERE CustomerID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $customerID);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
 
-// Perform the logout operation when a request is made to log out
-if (isset($_POST['confirmLogout'])) {
-    if (isset($_SESSION['admin_id'])) {
-        // Unset all of the session variables
-        $_SESSION = array();
-        // Destroy the session for the admin
-        session_destroy();
-        // Redirect to login page
-        redirectToLogin();
-    } elseif (isset($_SESSION['customer_id'])) {
-        // Unset all of the session variables
-        $_SESSION = array();
-        // Destroy the session for the customer
-        session_destroy();
-        // Redirect to login page
-        redirectToLogin();
-    }
-}
+// Set profile picture
+$profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['ProfilePicFilename'] : 'default-profile.png'; // Default image if not set
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -206,6 +193,7 @@ if (isset($_POST['confirmLogout'])) {
             text-decoration: none;
         }
 
+
         .confirmation-dialog {
             display: none;
             position: fixed;
@@ -217,7 +205,7 @@ if (isset($_POST['confirmLogout'])) {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
             z-index: 9999;
-            width: 300px;
+            width: auto;
         }
 
         .rel {
@@ -241,6 +229,48 @@ if (isset($_POST['confirmLogout'])) {
             padding: 10px;
             padding-bottom: 5px;
         }
+
+        /* CSS for the darker background overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+        }
+
+        /* Media query for screens with max width of 510px */
+        @media (max-width: 510px) {
+            .confirmation-dialog {
+                font-size: 12px;
+                display: none;
+                position: fixed;
+                top: 25%;
+                right: 30px;
+                background-color: white;
+                padding: 15px;
+                border: 1px solid #ccc;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                /* border-radius: 5px; */
+                z-index: 9999;
+                width: 85%;
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .show-dialog .confirmation-dialog {
+                display: block;
+            }
+
+            .show-dialog .overlay {
+                display: block;
+            }
+        }
     </style>
 </head>
 
@@ -248,9 +278,19 @@ if (isset($_POST['confirmLogout'])) {
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-light" href="#"><img src="../img/MAPARCO.png" alt="MAPARCO Logo" class="logo">MAPARCO</a>
+
+            <!-- Add the search form here, initially hidden and positioned for small screens -->
+            <form class="d-none d-lg-block d-flex" role="search" action="search.php" method="GET" id="navbarSearchForm">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="query" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon btn btn-sm"></span>
             </button>
+
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
                     <a class="navbar-brand fw-bold text-light" href="#"><img src="../img/MAPARCO.png" alt="MAPARCO Logo" class="logo" width="50px">MAPARCO</a>
@@ -312,6 +352,7 @@ if (isset($_POST['confirmLogout'])) {
     </nav>
 
     <!-- Logout Confirmation Dialog -->
+    <div class="overlay"></div>
     <div class="confirmation-dialog" id="logoutConfirmationCard">
         <p class="fw-bold fs-6">Log out?</p>
         <div class="rel">
@@ -343,6 +384,25 @@ if (isset($_POST['confirmLogout'])) {
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show the confirmation dialog
+            document.getElementById("logout-tab").addEventListener("click", function() {
+                document.body.classList.add("show-dialog");
+            });
+
+            // Cancel logout
+            document.getElementById("cancelLogout").addEventListener("click", function() {
+                document.body.classList.remove("show-dialog");
+            });
+
+            // Confirm logout
+            document.getElementById("confirmLogout").addEventListener("click", function() {
+                document.getElementById("logoutForm").submit();
+            });
+        });
+    </script>
+
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

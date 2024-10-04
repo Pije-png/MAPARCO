@@ -72,7 +72,7 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="aut.css">
+    <link rel="stylesheet" href="authstyle100.css">
     <title>Customer Login</title>
 </head>
 
@@ -81,7 +81,7 @@ $conn->close();
         <div class="column">
             <div class="card">
                 <div class="text-center mb-3">
-                    <a href="index.php"> <img src="img/MAPARCO.png" alt="Logo"></a>
+                    <img src="img/MAPARCO.png" alt="Logo">
                     <h5 class="text-primary mb-2"><a href="payroll/login.php">MAPARCO</a><small>&trade;</small></h5>
                 </div>
 
@@ -95,7 +95,7 @@ $conn->close();
                             <i class="fas fa-envelope"></i>
                         </span>
                         <input type="email" id="email" name="email" placeholder=" " required>
-                        <label for="email">Email address</label>
+                        <label for="email">Email address*</label>
                     </div>
 
                     <div class="form-group">
@@ -103,13 +103,13 @@ $conn->close();
                             <i class="fas fa-key"></i>
                         </span>
                         <input type="password" id="password" name="password" placeholder=" " required>
-                        <label for="password">Password</label>
+                        <label for="password">Password*</label>
                     </div>
                     <div class="forgot">
                         <a href="forgot_password.php">Forgot your password?</a>
                     </div>
 
-                    <button type="submit" class="btn btn-success login-btn">Login</button>
+                    <button type="submit" class="btn btn-primary login-btn">Login</button>
                 </form>
             </div>
             <div class="border mt-3">

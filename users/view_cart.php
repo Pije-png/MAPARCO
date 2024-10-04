@@ -185,7 +185,12 @@ $totalCartValue = 0; // Initialize total cart value
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='6'>Cart is empty</td></tr>";
+                            echo "<tr>
+                            <td colspan='6' class='text-center'>
+                             <img src='users/mr3.png' alt='No cancelled orders' style='width:300px; height:auto;'>
+                            <h3>Cart is empty</h3>
+                            </td>
+                            </tr>";
                         }
                         ?>
                     </tbody>

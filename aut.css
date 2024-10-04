@@ -1,0 +1,251 @@
+/* <style> */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: rgb(200, 255, 200); */
+    /* background-color: rgb(232, 247, 232); */
+}
+
+.card {
+    width: 350px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+    padding: 20px;
+}
+
+.border {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+}
+
+.card img {
+    display: block;
+    margin: 0 auto 10px auto;
+    width: 80px;
+}
+
+.card h5 {
+    text-align: center;
+    margin-top: 0;
+    font-weight: bold;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.input-icon {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    color: #777;
+    font-size: 13px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 5px 40px 8px 40px;
+    border: 1px solid #ccc;
+    border-radius: 18px 18px 18px 18px;
+    font-size: 1rem;
+    background-color: transparent;
+}
+
+.form-group label {
+    font-size: 11px;
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    font-size: 12px;
+    color: #777;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.form-group input:focus {
+    outline: 2px solid #008000;
+    /* border-color: #008000; */
+}
+
+.form-group input:focus+label,
+.form-group input:not(:placeholder-shown)+label {
+    top: -12px;
+    left: 25px;
+    font-size: 12px;
+    color: #008000;
+    /* color: rgb(0, 128, 255); */
+    background-color: #fff;
+    padding: 0px 5px;
+    /* border: 1px solid #777; */
+    border-radius: 3px;
+}
+
+.login-btn {
+    width: 100%;
+}
+
+.register-btn {
+    width: 100%;
+}
+
+.forgot {
+    text-align: right;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.forgot a {
+    color: #008000;
+    text-decoration: none;
+    /* font-size: 0.9rem; */
+    font-size: 12px;
+}
+
+.forgot a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.login {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login a {
+    color: #008000;
+    text-decoration: none;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
+.register {
+    text-align: center;
+    /* margin-top: 15px; */
+    font-size: 12px;
+}
+
+.register a {
+    color: #008000;
+    text-decoration: none;
+    /* font-weight: bold; */
+}
+
+
+.register a:hover {
+    text-decoration: underline;
+}
+
+/* </style> */
+
+/* <style> */
+.link {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 575px) {
+    .form {
+        min-width: 340px;
+        /* 342px reduced by 30% */
+        max-width: 350px;
+        /* 350px reduced by 30% */
+        background-color: #fff;
+        border: 0.7px solid #ccc;
+        /* 1px reduced by 30% */
+        border-radius: 3.5px;
+        position: absolute;
+        top: 10%;
+    }
+
+    .text-center p,
+    .forgot a {
+        font-size: 13px;
+    }
+
+    input[type="password"],
+    input[type="email"],
+    input[type="text"],
+    input[type="tel"] {
+        font-size: 13px;
+        /* 12px reduced by 30% */
+        border: transparent;
+    }
+
+    .form h5 {
+        text-align: center;
+        margin-top: 0;
+        font-weight: bold;
+        font-size: 22px;
+    }
+
+    .form a i {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 25px;
+    }
+
+    form {
+        padding: 1px 1px 0px;
+        line-height: 2em;
+    }
+
+    label {
+        font-size: 13px;
+    }
+
+    .input-group i {
+        font-size: 13px;
+        /* 13px reduced by 30% */
+    }
+
+    .btn.btn-success.btn-md {
+        font-size: 13px;
+        padding: 10px 20px;
+    }
+
+    .form-group input:focus+label,
+    .form-group input:not(:placeholder-shown)+label {
+        top: -12px;
+        left: 30px;
+        font-size: 12px;
+        color: #008000;
+        /* color: rgb(0, 128, 255); */
+        background-color: #fff;
+        padding: 0px 5px;
+        /* border: 1px solid #777; */
+        border-radius: 3px;
+    }
+
+    .input-icon {
+        position: absolute;
+        top: 55%;
+        left: 15px;
+        transform: translateY(-50%);
+        color: #777;
+        font-size: 13px;
+    }
+}
+
+/* </style> */
