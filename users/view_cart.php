@@ -103,7 +103,7 @@ $totalCartValue = 0; // Initialize total cart value
         @media (max-width: 510px) {
 
             table thead tr th,
-            table tbody tr td ,
+            table tbody tr td,
             table tfoot tr th {
                 font-size: 10px;
                 padding: 0;
@@ -142,9 +142,14 @@ $totalCartValue = 0; // Initialize total cart value
 
         }
     </style>
-
 <body>
     <?php include 'navbars/navbar.php' ?>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+        </ol>
+    </nav>
     <div class="cart-container vh-100">
         <div class="container">
             <div class="container header-container">

@@ -192,11 +192,11 @@ if (isset($_POST['confirmLogout'])) {
             font-weight: bold;
         }
     </style>
+    <!-- CSS for Logout Confirmation Dialog -->
     <style>
         #logout-tab {
             transition: background-color 0.3s, color 0.3s;
             color: #dc3545;
-
         }
 
         #logout-tab:hover {
@@ -204,6 +204,7 @@ if (isset($_POST['confirmLogout'])) {
             color: white;
             text-decoration: none;
         }
+
 
         .confirmation-dialog {
             display: none;
@@ -216,7 +217,7 @@ if (isset($_POST['confirmLogout'])) {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
             z-index: 9999;
-            width: 300px;
+            width: auto;
         }
 
         .rel {
@@ -240,13 +241,55 @@ if (isset($_POST['confirmLogout'])) {
             padding: 10px;
             padding-bottom: 5px;
         }
+
+        /* CSS for the darker background overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+        }
+
+        /* Media query for screens with max width of 510px */
+        @media (max-width: 510px) {
+            .confirmation-dialog {
+                font-size: 12px;
+                display: none;
+                position: fixed;
+                top: 25%;
+                right: 30px;
+                background-color: white;
+                padding: 15px;
+                border: 1px solid #ccc;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                /* border-radius: 5px; */
+                z-index: 9999;
+                width: 85%;
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .show-dialog .confirmation-dialog {
+                display: block;
+            }
+
+            .show-dialog .overlay {
+                display: block;
+            }
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="#"><img src="../img/MAPARCO.png" alt="MAPARCO Logo" class="logo">MAPARCO</a>
+            <a class="navbar-brand fw-bold text-light" href="dashboard.php"><img src="../img/MAPARCO.png" alt="MAPARCO Logo" class="logo">MAPARCO</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon btn btn-sm"></span>
             </button>
@@ -285,7 +328,7 @@ if (isset($_POST['confirmLogout'])) {
                                 </div>
                             </form>
                         </li>
-                        <li class="nav-item dropdown d-flex align-items-center ms-auto">
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle bg-success p-2 rounded" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-gear"></i>
                             </a>
@@ -293,6 +336,7 @@ if (isset($_POST['confirmLogout'])) {
                                 <li><a href="profile.php" class="dropdown-item"><i class="fa-solid fa-user"></i> Profile</a></li>
                                 <li><a href="address.php" class="dropdown-item"><i class="fa-solid fa-location-dot"></i> Address</a></li>
                                 <li><a href="purchase.php" class="dropdown-item"><i class="fa-solid fa-credit-card"></i> Purchase</a></li>
+                                <!--<li> <a href="#" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a></li>-->
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -303,7 +347,6 @@ if (isset($_POST['confirmLogout'])) {
                                 </li>
                             </ul>
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -311,6 +354,7 @@ if (isset($_POST['confirmLogout'])) {
     </nav>
 
     <!-- Logout Confirmation Dialog -->
+    <div class="overlay"></div>
     <div class="confirmation-dialog" id="logoutConfirmationCard">
         <p class="fw-bold fs-6">Log out?</p>
         <div class="rel">
@@ -322,27 +366,7 @@ if (isset($_POST['confirmLogout'])) {
             </form>
         </div>
     </div>
-
-    <!-- Script to handle Logout confirmation -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Show the confirmation dialog
-            document.getElementById("logout-tab").addEventListener("click", function() {
-                document.getElementById("logoutConfirmationCard").style.display = "block";
-            });
-
-            // Cancel logout
-            document.getElementById("cancelLogout").addEventListener("click", function() {
-                document.getElementById("logoutConfirmationCard").style.display = "none";
-            });
-
-            // Confirm logout
-            document.getElementById("confirmLogout").addEventListener("click", function() {
-                document.getElementById("logoutForm").submit();
-            });
-        });
-    </script>
-
+    
     <nav class="relative">
         <div class="back mt-5">
             <?php
@@ -372,6 +396,43 @@ if (isset($_POST['confirmLogout'])) {
         </div>
     </nav>
 
+    <!-- Script to handle Logout confirmation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show the confirmation dialog
+            document.getElementById("logout-tab").addEventListener("click", function() {
+                document.getElementById("logoutConfirmationCard").style.display = "block";
+            });
+
+            // Cancel logout
+            document.getElementById("cancelLogout").addEventListener("click", function() {
+                document.getElementById("logoutConfirmationCard").style.display = "none";
+            });
+
+            // Confirm logout
+            document.getElementById("confirmLogout").addEventListener("click", function() {
+                document.getElementById("logoutForm").submit();
+            });
+        });
+    </script>
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show the confirmation dialog
+            document.getElementById("logout-tab").addEventListener("click", function() {
+                document.body.classList.add("show-dialog");
+            });
+
+            // Cancel logout
+            document.getElementById("cancelLogout").addEventListener("click", function() {
+                document.body.classList.remove("show-dialog");
+            });
+
+            // Confirm logout
+            document.getElementById("confirmLogout").addEventListener("click", function() {
+                document.getElementById("logoutForm").submit();
+            });
+        });
+    </script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->

@@ -25,6 +25,7 @@ if (isset($_POST['confirmLogout'])) {
         redirectToLogin();
     }
 }
+
 // Capture start and end date from the form (default to January 1st of the current year to today if not set)
 $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : date('Y-01-01');
 $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : date('Y-m-d');
@@ -53,7 +54,7 @@ $newOrdersQuery = "SELECT COUNT(*) AS newOrders FROM orders WHERE OrderStatus = 
 
 // Queries for other metrics
 // $totalIncomeQuery = "SELECT SUM(TotalAmount) AS totalIncome FROM orders WHERE OrderDate > (NOW() - INTERVAL 30 DAY)";
-$totalIncomeQuery = "SELECT SUM(TotalAmount) AS totalIncome FROM orders WHERE PaymentStatus = 'Paid' AND OrderDate > (NOW() - INTERVAL 30 DAY)";
+$totalIncomeQuery = "SELECT SUM(TotalAmount) AS totalIncome FROM orders WHERE PaymentStatus = 'Paid' AND OrderDate";
 $totalExpenseQuery = "SELECT SUM(Price * Quantity) AS totalExpense FROM orderitems WHERE OrderID IN (SELECT OrderID FROM orders WHERE OrderDate > (NOW() - INTERVAL 30 DAY))";
 
 $newUsersQuery = "SELECT COUNT(*) AS newUsers FROM customers WHERE create_on > (NOW() - INTERVAL 30 DAY)";
@@ -171,6 +172,40 @@ $row = $result->fetch_assoc();
 $totalProducts = $row['totalProducts'];
 
 
+// Initialize variables
+$totalRevenue = 0.00;
+$filteredTotalRevenue = 0.00;
+
+$sqlRevenueTotal = "SELECT SUM(TotalAmount) AS TotalRevenue FROM orders WHERE OrderStatus = 'Delivered'";
+$resultRevenueTotal = $conn->query($sqlRevenueTotal);
+$rowRevenueTotal = $resultRevenueTotal->fetch_assoc();
+$totalRevenue = $rowRevenueTotal['TotalRevenue'];
+
+$dateFilter = '';
+if (isset($_POST['report_month']) && !empty($_POST['report_month'])) {
+    $report_month = $_POST['report_month'];
+    $dateFilter = "AND MONTH(OrderDate) = $report_month";
+}
+
+$sqlRevenueDetails = "SELECT o.OrderID, c.Name AS CustomerName, o.OrderDate, o.TotalAmount, o.OrderStatus, p.ProductName, p.Photo
+                      FROM orders o
+                      INNER JOIN customers c ON o.CustomerID = c.CustomerID
+                      INNER JOIN orderitems oi ON o.OrderID = oi.OrderID
+                      INNER JOIN products p ON oi.ProductID = p.ProductID
+                      WHERE o.OrderStatus = 'Delivered' $dateFilter
+                      ORDER BY o.OrderDate DESC";
+$resultRevenueDetails = $conn->query($sqlRevenueDetails);
+
+$filteredTotalRevenue = 0.00;
+$revenueData = [];
+
+while ($row = $resultRevenueDetails->fetch_assoc()) {
+    $revenueData[] = $row;
+    $filteredTotalRevenue += $row['TotalAmount'];
+}
+
+$revenue_count = $resultRevenueDetails->num_rows;
+
 // Fetch products from the database
 $query = "SELECT * FROM products";
 $result = $conn->query($query);
@@ -188,15 +223,15 @@ $product_count = $result->num_rows;
     <title>Ecommerce Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/homee1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/home4.css">
 </head>
 
 <body>
     <?php include 'sidebar.php'; ?>
     <?php include 'inventory.php'; ?>
-
     <section class="home">
+        <?php include 'header.php'; ?>
         <div class="container-fluid">
             <!-- Tab Navigation Menu -->
             <div class="tab-header">
@@ -210,6 +245,11 @@ $product_count = $result->num_rows;
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-controls="inventory" aria-selected="false">
                                 <h5>Inventory</h5>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="sales-tab" data-bs-toggle="tab" data-bs-target="#sales" type="button" role="tab" aria-controls="sales" aria-selected="false">
+                                <h5>Sales</h5>
                             </button>
                         </li>
                     </div>
@@ -387,7 +427,7 @@ $product_count = $result->num_rows;
 
                     <!-- Inventory Tab Pane -->
                     <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
-                        <div class="container-fluid">
+                        <div class="container-fluid pb-4">
                             <div class="row text-center">
                                 <div class="col-md-4">
                                     <div class="card text-white bg-success sm-3">
@@ -435,7 +475,7 @@ $product_count = $result->num_rows;
                                             <th style="width:25%">Description</th>
                                             <th style="width:10%">Price</th>
                                             <th style="width:10%">Stocks</th>
-                                            <th style="width:10%">Sold</th>
+                                            <!-- <th style="width:10%">Sold</th> -->
                                             <th colspan="2" style="width:5%">Tools</th>
                                         </tr>
                                     </thead>
@@ -463,7 +503,7 @@ $product_count = $result->num_rows;
                                                 echo "<td>" . $row["Description"] . "</td>";
                                                 echo "<td style='color: red; text-align: center;'> ₱" . $row["Price"] . "</td>";
                                                 echo "<td style='color: blue; text-align: center'>" . $row["QuantityAvailable"] . "</td>";
-                                                echo "<td class='text-success'>" . $row['QuantitySold'] . "</td>";
+                                                // echo "<td class='text-success'>" . $row['QuantitySold'] . "</td>";
                                                 echo "<td>";
                                                 // Open modal with product data when update link is clicked
                                                 echo "<a href='#' onclick='openModal(" . $row["ProductID"] . ", \"" . $row["ProductName"] . "\", \"" . $row["Description"] . "\", " . $row["Price"] . ", " . $row["QuantityAvailable"] . ")' class='update-link mx-2'><i class='bx bxs-edit'></i></a>";
@@ -480,6 +520,83 @@ $product_count = $result->num_rows;
                                         ?>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
+                        <div class="container-fluid pb-4 sales-tab">
+                            <div class="revenue-header">
+                                <h1>Sales Report</h1>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-lg-8">
+                                    <div class="card p-4">
+                                        <div class="total-revenue">
+                                            <h5>Total Sales: ₱<?php echo number_format($totalRevenue, 2); ?></h5>
+                                            <h5>Filtered Total Sales: ₱<?php echo number_format($filteredTotalRevenue, 2); ?></h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="card p-4">
+                                        <div class="filter-controls">
+                                            <form method="post" class="d-flex">
+                                                <label for="report_month">Filter by Month: &nbsp;</label>
+                                                <select name="report_month" id="report_month">
+                                                    <option value="">Select Month</option>
+                                                    <?php for ($i = 1; $i <= 12; $i++) : ?>
+                                                        <option value="<?php echo $i; ?>" <?php if (isset($report_month) && $report_month == $i) echo 'selected'; ?>>
+                                                            <?php echo date('F', mktime(0, 0, 0, $i, 10)); ?>
+                                                        </option>
+                                                    <?php endfor; ?>
+                                                </select>
+                                                <button type="submit" class="pt-2"><i class="fas fa-filter"></i> Apply</button>
+                                            </form>
+                                            <p class="print">
+                                                <button class="btn btn-sm btn-success mt-3" id="print_btn"><i class="fas fa-print"></i> Print</button>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="revenue-table">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Order ID</th>
+                                                    <th>Customer Name</th>
+                                                    <th>Order Date</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Order Status</th>
+                                                    <th>Product</th>
+                                                    <th>Photo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $row_counter = 1; ?>
+                                                <?php foreach ($revenueData as $row) : ?>
+                                                    <tr>
+                                                        <td><?php echo $row_counter++; ?></td>
+                                                        <td><?php echo $row['OrderID']; ?></td>
+                                                        <td><?php echo $row['CustomerName']; ?></td>
+                                                        <td><?php echo date("F j, Y", strtotime($row['OrderDate'])); ?></td>
+                                                        <td class="text-danger">₱<?php echo number_format($row['TotalAmount'], 2); ?></td>
+                                                        <td><?php echo $row['OrderStatus']; ?></td>
+                                                        <td><?php echo $row['ProductName']; ?></td>
+                                                        <td><img src="management/<?php echo $row['Photo']; ?>" alt="<?php echo $row['ProductName']; ?>" class="product-image"></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -508,6 +625,136 @@ $product_count = $result->num_rows;
             });
         });
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#print_btn').click(function() {
+                var report_month = $('#report_month').val();
+                var url = "print_sales.php";
+                if (report_month) {
+                    url += "?report_month=" + report_month;
+                }
+                var nw = window.open(url, "_blank", "height=500,width=800");
+                setTimeout(function() {
+                    nw.print();
+                    setTimeout(function() {
+                        nw.close();
+                    }, 500);
+                }, 1000);
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#report_month').select2({
+                minimumResultsForSearch: Infinity
+            });
+        });
+    </script>
+    <style>
+        .sales-tab .revenue-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .sales-tab .card {
+            /* border: none; */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .sales-tab .total-revenue h5 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .sales-tab .filter-controls option {
+            font-size: 12px;
+        }
+
+        .sales-tab .filter-controls select {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        .sales-tab .filter-controls button {
+            padding: 8px 8px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 50%;
+        }
+
+        .sales-tab .filter-controls .print button {
+            width: 100%;
+        }
+
+        .sales-tab .filter-controls button:hover {
+            background-color: #0056b3;
+        }
+
+        .sales-tab table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .sales-tab table th,
+        .sales-tab table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .sales-tab table th {
+            background-color: #16a085;
+            color: white;
+        }
+
+        .sales-tab table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .sales-tab table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .sales-tab .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .sales-tab .filter-controls label {
+            font-size: 14px;
+        }
+
+        .sales-tab .sales-tab #report_month {
+            font-size: 14px;
+        }
+
+        .sales-tab .select2-container .select2-selection--single {
+            height: 38px;
+            font-size: 16px;
+        }
+
+        .sales-tab .select2-container .select2-selection--single .select2-selection__rendered {
+            line-height: 36px;
+        }
+
+        .sales-tab .select2-results__option {
+            font-size: 16px;
+        }
+    </style>
 </body>
 
 </html>

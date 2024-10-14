@@ -10,7 +10,6 @@ $row = $result->fetch_assoc();
 // Set profile picture
 $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['ProfilePicFilename'] : 'default-profile.png'; // Default image if not set
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +20,6 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <style>
         /* Fonts */
@@ -30,7 +28,7 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
         /* Body Styles */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f1f1f1;
         }
 
         /* Navigation Bar Styles */
@@ -95,8 +93,7 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
 
         .offcanvas {
             background-color: #15BE2F;
-            max-width: 80%;
-            /* Adjust max-width as needed */
+            max-width: 100%;
         }
 
         /* Add hover effect inside offcanvas menu */
@@ -144,27 +141,6 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
             }
         }
 
-        /* Back and Mini-nav Styles */
-        .back {
-            width: 100%;
-            position: relative;
-            top: 0;
-        }
-
-        .mini-nav {
-            position: fixed;
-            display: flex;
-            margin: 0px 10px;
-            flex-direction: row;
-            align-items: center;
-        }
-
-        .mini-nav a {
-            margin-right: 10px;
-            color: #007bff;
-            text-decoration: none;
-        }
-
         .dropdown-menu li a {
             color: #555;
             padding: 8px 10px;
@@ -174,13 +150,7 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
         .vr {
             display: none;
         }
-
-        .mini-nav p.product-title {
-            margin: 0;
-            font-weight: bold;
-        }
     </style>
-    <!-- CSS for Logout Confirmation Dialog -->
     <style>
         #logout-tab {
             transition: background-color 0.3s, color 0.3s;
@@ -193,7 +163,6 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
             text-decoration: none;
         }
 
-
         .confirmation-dialog {
             display: none;
             position: fixed;
@@ -205,7 +174,7 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
             z-index: 9999;
-            width: auto;
+            width: 300px;
         }
 
         .rel {
@@ -229,46 +198,41 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
             padding: 10px;
             padding-bottom: 5px;
         }
-
-        /* CSS for the darker background overlay */
-        .overlay {
-            display: none;
+    </style>
+    <style>
+        .breadcrumb {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 50px;
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 9998;
+            /* z-index: 1001; */
+            background-color: #f8f9fa;
+            margin: 0;
+            border-bottom: 1px solid #dee2e6;
+            transition: opacity 0.3s ease;
         }
 
-        /* Media query for screens with max width of 510px */
+        .breadcrumb li {
+            font-size: 12px;
+        }
+
+        .breadcrumb a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            content: ">";
+            color: #6c757d;
+        }
+
         @media (max-width: 510px) {
-            .confirmation-dialog {
-                font-size: 12px;
-                display: none;
-                position: fixed;
-                top: 25%;
-                right: 30px;
-                background-color: white;
-                padding: 15px;
-                border: 1px solid #ccc;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-                /* border-radius: 5px; */
-                z-index: 9999;
-                width: 85%;
-            }
-
-            .overlay {
-                display: none;
-            }
-
-            .show-dialog .confirmation-dialog {
-                display: block;
-            }
-
-            .show-dialog .overlay {
-                display: block;
+            .breadcrumb {
+                top: 45px;
+                height: auto;
             }
         }
     </style>
@@ -278,19 +242,9 @@ $profilePic = !empty($row['ProfilePicFilename']) ? 'users/uploads/' . $row['Prof
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-light" href="#"><img src="../img/MAPARCO.png" alt="MAPARCO Logo" class="logo">MAPARCO</a>
-
-            <!-- Add the search form here, initially hidden and positioned for small screens -->
-            <form class="d-none d-lg-block d-flex" role="search" action="search.php" method="GET" id="navbarSearchForm">
-                <div class="input-group">
-                    <input class="form-control" type="search" name="query" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
-                </div>
-            </form>
-
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon btn btn-sm"></span>
             </button>
-
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
                     <a class="navbar-brand fw-bold text-light" href="#"><img src="../img/MAPARCO.png" alt="MAPARCO Logo" class="logo" width="50px">MAPARCO</a>

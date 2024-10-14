@@ -1,6 +1,21 @@
 <?php
 include '../../connection.php';
 
+// HEADER
+// Fetch admin details from the database
+$admin_id = $_SESSION['admin_id'];
+$query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ?");
+$query->bind_param("i", $admin_id);
+$query->execute();
+$result = $query->get_result();
+$admin = $result->fetch_assoc();
+
+// Set default values in case data is missing
+$admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
+$admin_photo = htmlspecialchars($admin['photo'] ?? 'path/to/default/photo.png');
+$admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+// HEADER
+
 // Fetch all orders with customer names and product details
 $sql = "SELECT o.OrderID, o.OrderDate, o.TotalAmount, o.OrderStatus, c.Name AS CustomerName,
                p.ProductName, p.Photo
@@ -29,8 +44,12 @@ $conn->close();
     <title>Order History</title>
 </head>
 <style>
+    .container-fluid {
+        background: linear-gradient(to bottom, MediumSeaGreen, white);
+    }
+
     td img {
-        max-width: 50px;
+        max-width: 25px;
         height: auto;
         border-radius: 4px;
     }
@@ -50,6 +69,7 @@ $conn->close();
     table td {
         font-size: 12px;
         border: 1px solid #999;
+        padding: 5px;
     }
 
     table tr,
@@ -71,14 +91,18 @@ $conn->close();
 
     <?php include 'sidebar.php'; ?>
 
-     
+
 
     <section class="home">
-        <div class="customer-container">
-            <div class="container-fluid">
-                <div class="head pt-3">
-                    <h4 class="text-center">History List</h4>
+        <?php include 'header.php'; ?>
+        <div class="container-fluid">
+            <div class="row mb-5 mt-5 py-5 px-3">
+                <div class="col-12">
+                    <div class="head pb-2 text-center">
+                        <p class="h3 fw-bold text-light" style="font-family: cursive;"><i class="fa-solid fa-fire"></i> List of History</p>
+                    </div>
                 </div>
+
                 <div class="orders-table-container">
                     <table class="admin-dashboard">
                         <thead>
@@ -87,7 +111,7 @@ $conn->close();
                                     <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo $delivered_count; ?></span>
                                 </th>
                             </tr>
-                            <tr class="text-center">
+                            <tr class="">
                                 <!-- <th>CustomerID</th> -->
                                 <th style="width:2%"></th>
                                 <th>Photo</th>
@@ -98,7 +122,7 @@ $conn->close();
                                 <th>Order Status</th>
                             </tr>
                         </thead>
-                        <tbody class="bg bg-light text-center">
+                        <tbody class="bg bg-light ">
                             <?php
                             $row_counter = 1; // Initialize row_counter
 

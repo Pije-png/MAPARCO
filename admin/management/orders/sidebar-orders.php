@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="sidebar-orders.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="sidebar-orders1.css">
     <title>Sidebar</title>
     <style>
         .pending {
@@ -50,31 +50,29 @@
 
 <body>
     <nav class="sidebar close">
-        <header class="mt-3">
+        <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="../../../img/MAPARCO.png" alt="logo">
+                    <img src="../../../img/MAPARCO.png" alt="logo" width="40px">
                 </span>
                 <div class="header-text text">
                     <span class="name">MAPARCO</span>
-                    <small>Online <i class="fa-solid fa-circle online-icon"></i></small>
+                    <p class="smol">Online <i class="fa-solid fa-circle online-icon"></i></p>
                 </div>
             </div>
-            <i class='bx bx-chevron-right toggle'></i>
+            <i class='fa-solid fa-bars toggle'></i>
         </header>
 
-        <div class="menu-bar mt-4">
+        <div class="menu-bar mt-5 pt-4">
             <div class="menu">
-                <!-- Back to Dashboard link -->
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="../../home.php" class="nav-link-item">
-                            <i class="fa-solid fa-arrow-left icon"></i>
-                            <span class="nav-text text">Back to Dashboard</span>
+                        <a href="../../home.php" class="nav-link-item" id="dashboard-link">
+                            <i class='fas fa-tachometer-alt icon'></i>
+                            <span class="nav-text text">Dashboard</span>
                         </a>
                     </li>
                 </ul>
-
                 <!-- ===== Management ====== -->
                 <div class="header title">
                     <strong>Orders</strong>

@@ -60,7 +60,7 @@ $cancelled_count = $result->num_rows;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/MAPARCO.png" />
-    <link rel="stylesheet" href="Orders.css">
+    <link rel="stylesheet" href="Orders3.css">
     <title>Cancelled Orders</title>
     <style>
         .admin-dashboard {
@@ -132,8 +132,9 @@ $cancelled_count = $result->num_rows;
     <?php include 'sidebar-orders.php'; ?>
 
     <section class="home">
+        <?php include 'header.php'; ?>
         <div class="order-container">
-            <div class="container-fluid">
+            <div class="container-fluid pt-5">
                 <div class="head pt-3">
                     <h4 class="text-center">List of Cancelled</h4>
                 </div>

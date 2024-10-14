@@ -153,7 +153,12 @@ $conn->close();
 
 <body>
     <?php include 'navbars/navbar.php'; ?>
-
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">History</li>
+        </ol>
+    </nav>
     <div class="buy-container vh-100">
         <div class="container">
             <div class="container header-container">

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             // Insert new review
             $stmt = $conn->prepare("INSERT INTO reviews (OrderID, ProductID, CustomerID, Rating, ReviewText) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("iiiss", $orderID, $productID , $customerID, $rating, $reviewText);
+            $stmt->bind_param("iiiss", $orderID, $productID, $customerID, $rating, $reviewText);
         }
 
         if ($stmt->execute()) {
@@ -173,6 +173,12 @@ $conn->close();
 
 <body>
     <?php include 'navbars/navbar.php'; ?>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">To Review</li>
+        </ol>
+    </nav>
 
     <div class="buy-container vh-100">
         <div class="container mt-2">

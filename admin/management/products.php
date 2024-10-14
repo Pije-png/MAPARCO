@@ -1,6 +1,21 @@
 <?php
 include '../../connection.php';
 
+// HEADER
+// Fetch admin details from the database
+$admin_id = $_SESSION['admin_id'];
+$query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ?");
+$query->bind_param("i", $admin_id);
+$query->execute();
+$result = $query->get_result();
+$admin = $result->fetch_assoc();
+
+// Set default values in case data is missing
+$admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
+$admin_photo = htmlspecialchars($admin['photo'] ?? 'path/to/default/photo.png');
+$admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+// HEADER
+
 // Initialize messages
 $global_message = "";
 $global_update_message = "";
@@ -131,87 +146,90 @@ $product_count = $result->num_rows;
     <title>Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/manage1.css">
+    <link rel="stylesheet" href="css/manage6.css">
 </head>
 
-<body class="bg bg-light">
+<body>
 
     <?php include 'sidebar.php'; ?>
 
     <section class="home">
+        <?php include 'header.php'; ?>
         <div class="customer-container">
             <div class="container-fluid">
-                <div class="pt-2 pb-5">
+                <div class="mb-5 mt-5 py-5 px-3">
                     <div class="head pb-2">
                         <div class="arrow left"></div>
-                        <p class="text-center h4 fw-bold text-light" style="font-style: italic; font-family: cursive; "><i class="fa-solid fa-fire"></i> List of Products</p>
+                        <p class="h3 fw-bold text-light"
+                            style="font-family: cursive;"
+                            ><i class="fa-solid fa-fire"></i> 
+                            List of Products
+                        </p>
                         <div class="arrow right"></div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="status-messages">
-                                <?php if (!empty($global_update_message)) {
-                                    echo "<div class='status-message'>" . htmlspecialchars($global_update_message) . " <i class='bx bxs-check-circle text-success'></i></div>";
-                                } ?>
-                            </div>
-                            <div class="status-messages">
-                                <?php if (isset($global_message) && !empty($global_message)) {
-                                    echo "<div class='status-message'>" . htmlspecialchars($global_message) . " <i class='bx bxs-check-circle text-success'></i></div>";
-                                } ?>
-                            </div>
-                            <div class="orders-table-container">
-                                <table class="admin-dashboard">
-                                    <thead>
-                                        <tr class="fw-bold fs-5 bg bg-success text-light">
-                                            <th colspan="6">Products
-                                                <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo $product_count; ?></span>
-                                            </th>
-                                            <th colspan="2" class="text-center">
-                                                <button type="button" class="editbtn btn btn-sm btn-success border-0" onclick="openCreateModal()">+ Add</button>
-                                            </th>
-                                        </tr>
-                                        <tr class="text-center">
-                                            <!-- <th>CustomerID</th> -->
-                                            <th style="width:2%"></th>
-                                            <th>Photo</th>
-                                            <th>Product</th>
-                                            <th>Description</th>
-                                            <th style="text-align: center">Price</th>
-                                            <th style="text-align: center">Quantity</th>
-                                            <th colspan="2" style="width:7%">Tools</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg bg-light text-center">
-                                        <?php
-                                        $row_counter = 1; // Initialize row_counter
-
-                                        if ($result && $result->num_rows > 0) {
-                                            // Output data of each row
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo "<tr>";
-                                                echo "<td>" . $row_counter++ . "</td>"; // Increment row_counter
-                                                echo "<td><img src='" . $row["Photo"] . "' class='img'></td>";
-                                                echo "<td>" . $row["ProductName"] . "</td>";
-                                                echo "<td>" . $row["Description"] . "</td>";
-                                                echo "<td style='color: red; text-align: center;'> ₱" . $row["Price"] . "</td>";
-                                                echo "<td style='color: blue; text-align: center'>" . $row["QuantityAvailable"] . "</td>";
-                                                echo "<td>";
-                                                echo "<button class='btn btn-primary btn-sm' onclick='openModal(" . $row["ProductID"] . ", \"" . $row["ProductName"] . "\", \"" . $row["Description"] . "\", " . $row["Price"] . ", " . $row["QuantityAvailable"] . ")'><i class='bx bxs-edit'></i></button> ";
-                                                echo "</td>";
-                                                echo "<td>";
-                                                echo "<button class='btn btn-danger btn-sm' onclick='openDeleteModal(" . $row["ProductID"] . ")'><i class='bx bxs-trash'></i></button>";
-                                                echo "</td>";
-                                                echo "</tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='7'>No products found</td></tr>";
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <!-- <div class="card rounded-0"> -->
+                    <div class="">
+                        <div class="status-messages">
+                            <?php if (!empty($global_update_message)) {
+                                echo "<div class='status-message'>" . htmlspecialchars($global_update_message) . " <i class='bx bxs-check-circle text-success'></i></div>";
+                            } ?>
                         </div>
+                        <div class="status-messages">
+                            <?php if (isset($global_message) && !empty($global_message)) {
+                                echo "<div class='status-message'>" . htmlspecialchars($global_message) . " <i class='bx bxs-check-circle text-success'></i></div>";
+                            } ?>
+                        </div>
+                        <table class="admin-dashboard">
+                            <thead>
+                                <tr class="fw-bold fs-5 bg bg-success text-light">
+                                    <th colspan="6" class="py-2">Products
+                                        <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo $product_count; ?></span>
+                                    </th>
+                                    <th colspan="2">
+                                        <button type="button" class="editbtn btn btn-sm btn-success border-0" onclick="openCreateModal()">+ Add</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <!-- <th>CustomerID</th> -->
+                                    <th style="width:2%"></th>
+                                    <th>Photo</th>
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th colspan="2" style="width:7%">Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $row_counter = 1; // Initialize row_counter
+
+                                if ($result && $result->num_rows > 0) {
+                                    // Output data of each row
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<td>" . $row_counter++ . "</td>"; // Increment row_counter
+                                        echo "<td><img src='" . $row["Photo"] . "' class='img'></td>";
+                                        echo "<td>" . $row["ProductName"] . "</td>";
+                                        echo "<td>" . $row["Description"] . "</td>";
+                                        echo "<td style='color: red;'> ₱" . $row["Price"] . "</td>";
+                                        echo "<td style='color: blue'>" . $row["QuantityAvailable"] . "</td>";
+                                        echo "<td>";
+                                        echo "<button class='btn btn-primary btn-sm' onclick='openModal(" . $row["ProductID"] . ", \"" . $row["ProductName"] . "\", \"" . $row["Description"] . "\", " . $row["Price"] . ", " . $row["QuantityAvailable"] . ")'><i class='bx bxs-edit'></i></button> ";
+                                        echo "</td>";
+                                        echo "<td>";
+                                        echo "<button class='btn btn-danger btn-sm' onclick='openDeleteModal(" . $row["ProductID"] . ")'><i class='bx bxs-trash'></i></button>";
+                                        echo "</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7'>No products found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>

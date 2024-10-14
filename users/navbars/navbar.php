@@ -42,7 +42,7 @@ if (isset($_POST['confirmLogout'])) {
         /* Body Styles */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f1f1f1;
         }
 
         /* Navigation Bar Styles */
@@ -108,7 +108,6 @@ if (isset($_POST['confirmLogout'])) {
         .offcanvas {
             background-color: #15BE2F;
             max-width: 80%;
-            /* Adjust max-width as needed */
         }
 
         /* Add hover effect inside offcanvas menu */
@@ -156,27 +155,6 @@ if (isset($_POST['confirmLogout'])) {
             }
         }
 
-        /* Back and Mini-nav Styles */
-        .back {
-            width: 100%;
-            position: relative;
-            top: 0;
-        }
-
-        .mini-nav {
-            position: fixed;
-            display: flex;
-            margin: 0px 10px;
-            flex-direction: row;
-            align-items: center;
-        }
-
-        .mini-nav a {
-            margin-right: 10px;
-            color: #007bff;
-            text-decoration: none;
-        }
-
         .dropdown-menu li a {
             color: #555;
             padding: 8px 10px;
@@ -185,11 +163,6 @@ if (isset($_POST['confirmLogout'])) {
 
         .vr {
             display: none;
-        }
-
-        .mini-nav p.product-title {
-            margin: 0;
-            font-weight: bold;
         }
     </style>
     <style>
@@ -240,6 +213,49 @@ if (isset($_POST['confirmLogout'])) {
             padding-bottom: 5px;
         }
     </style>
+    <style>
+        .breadcrumb {
+            position: fixed;
+            top: 49px;
+            width: 100%;
+            /* z-index: 1001; */
+            background-color: #f8f9fa;
+            margin: 0;
+            border-bottom: 1px solid #dee2e6;
+            transition: opacity 0.3s ease;
+        }
+
+        .breadcrumb li {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            content: ">";
+            color: #6c757d;
+        }
+
+        @media (max-width: 510px) {
+            .breadcrumb {
+                top: 42px;
+                height: auto;
+            }
+
+            .breadcrumb li {
+                font-size: 10px;
+                font-weight: 600;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -285,7 +301,7 @@ if (isset($_POST['confirmLogout'])) {
                             </form>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle  bg-success p-2 rounded" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle bg-success p-2 rounded" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-gear"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end p-2">
@@ -339,6 +355,22 @@ if (isset($_POST['confirmLogout'])) {
             document.getElementById("confirmLogout").addEventListener("click", function() {
                 document.getElementById("logoutForm").submit();
             });
+        });
+
+        document.getElementById('offcanvasNavbar').addEventListener('show.bs.offcanvas', function() {
+            document.querySelector('.breadcrumb').style.visibility = 'hidden';
+        });
+
+        document.getElementById('offcanvasNavbar').addEventListener('hide.bs.offcanvas', function() {
+            document.querySelector('.breadcrumb').style.visibility = 'visible';
+        });
+
+        document.getElementById('offcanvasNavbar').addEventListener('show.bs.offcanvas', function() {
+            document.querySelector('.breadcrumb').style.opacity = '0';
+        });
+
+        document.getElementById('offcanvasNavbar').addEventListener('hide.bs.offcanvas', function() {
+            document.querySelector('.breadcrumb').style.opacity = '1';
         });
     </script>
     <!-- jQuery -->

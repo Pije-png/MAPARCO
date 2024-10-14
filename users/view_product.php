@@ -14,13 +14,11 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
+        * {
             font-family: "Poppins", sans-serif;
             margin: 0;
             padding: 0;
-            /* overflow-x: hidden; */
-            background-color: #f8f9fa;
-            /* Added background color */
+            box-sizing: border-box;
         }
 
         .container {
@@ -28,6 +26,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            margin: 80px auto;
         }
 
         .product-details {
@@ -53,12 +52,6 @@
             display: flex;
         }
 
-        .BOX {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-        }
-
         .row {
             border-radius: 8px;
             padding: 20px;
@@ -72,23 +65,52 @@
         }
 
         @media (max-width: 510px) {
-            .product-info h2{
+            .product-info h2 {
                 font-size: 18px;
             }
+
             .product-info p,
             .product-info label,
-            .product-info price{
+            .product-info price {
                 font-size: 13px;
             }
+
+
         }
     </style>
 </head>
 
 <body>
-    <?php include 'navbars/navbar-vproduct.php'; ?>
+    <?php include 'navbars/navbar.php'; ?>
+    <?php
+    if (isset($_GET['ProductID'])) {
+        $productID = $_GET['ProductID'];
+        $sql = "SELECT * FROM products WHERE ProductID = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $productID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+    ?>
+            <nav class="navbar" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><?php echo $row['ProductName']; ?></li>
+                </ol>
+            </nav><?php
+                } else {
+                    echo "<p>Product not found</p>";
+                }
+            } else {
+                echo "<p>ProductID not provided</p>";
+            }
+                    ?>
+
     <div class="container">
         <div class="product-details">
-            <div class="BOX">
+            <div class="card">
                 <?php
                 if (isset($_GET['ProductID'])) {
                     $productID = $_GET['ProductID'];
@@ -138,7 +160,8 @@
                 ?>
             </div>
         </div>
-        <div class="container">
+
+        <div class="container-md">
             <div class="row">
                 <h4 class="fw-bold text-success">Product Reviews</h4>
                 <?php
@@ -159,7 +182,7 @@
                             $full_stars = floor($review_stars);
                             $empty_stars = 5 - $full_stars;
                 ?>
-                            <div class="col-md-6 mb-4">
+                            <div class="col-md-6">
                                 <div class="card review-card">
                                     <div class="card-body d-flex">
                                         <?php if (!empty($row['ProfilePicFilename'])) : ?>

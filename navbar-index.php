@@ -17,7 +17,7 @@
         /* Body Styles */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f1f1f1;
         }
 
         /* Navigation Bar Styles */
@@ -99,7 +99,7 @@
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="#"><img src="img/MAPARCO.png" alt="MAPARCO Logo" class="logo" width="50px">MAPARCO</a>
+            <a class="navbar-brand fw-bold text-light" href="#"><img src="img/MAPARCO.png" alt="MAPARCO Logo" class="logo" width="40px">MAPARCO</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

@@ -7,39 +7,41 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/sidebar-manage.css">
+    <link rel="stylesheet" href="css/sidebar-manage3.css">
     <link rel="stylesheet" href="css/home.css">
     <title>Sidebar</title>
 </head>
 
 <body>
     <nav class="sidebar close scrollspy">
-        <header class="mt-3">
+        <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="../../img/MAPARCO.png" alt="logo">
+                    <img src="../../img/MAPARCO.png" alt="logo" width="40px">
                 </span>
                 <div class="header-text text">
                     <span class="name">MAPARCO</span>
-                    <p class="smol">Online <i class="fa-solid fa-circle online-icon"></i></p class="smol">
+                    <p class="smol">Online <i class="fa-solid fa-circle online-icon"></i></p>
                 </div>
             </div>
-            <i class='bx bx-chevron-right toggle'></i>
+            <i class='fa-solid fa-bars toggle'></i>
         </header>
 
-        <div class="menu-bar mt-4">
+        <div class="menu-bar mt-5 pt-4">
             <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="../home.php" class="nav-link-item" id="dashboard-link">
+                            <i class='fas fa-tachometer-alt icon'></i>
+                            <span class="nav-text text">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
                 <!-- ===== Management ====== -->
                 <div class="header title">
                     <strong>Management</strong>
                 </div>
                 <ul class="menu-links">
-                    <li class="nav-link">
-                        <a href="../home.php" class="nav-link-item" id="dashboard-link">
-                            <i class='bx bxs-home icon'></i>
-                            <span class="nav-text text">Dashboard</span>
-                        </a>
-                    </li>
                     <li class="nav-link">
                         <a href="./products.php" class="nav-link-item" id="products-link">
                             <i class='fa-solid fa-boxes icon'></i>
@@ -52,12 +54,12 @@
                             <span class="nav-text text">Customers</span>
                         </a>
                     </li>
-                    <li class="nav-link">
+                    <!-- <li class="nav-link">
                         <a href="./sales.php" class="nav-link-item" id="sales-link">
                             <i class="fa-solid fa-chart-line icon"></i>
                             <span class="nav-text text">Sales</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-link">
                         <a href="#" class="nav-link-item" id="orders-link" onclick="toggleCollapse('orders-status')">
                             <i class='bx bxs-bar-chart-alt-2 icon'></i>
@@ -83,7 +85,7 @@
                         </a>
                     </li>
                     <li class="nav-link">
-                        <a href="./topsales.php" class="nav-link-item" id="top-selling-link">
+                        <a href="./topselling.php" class="nav-link-item" id="top-selling-link">
                             <i class='fa-solid fa-trophy icon'></i>
                             <span class="nav-text text">Top Selling</span>
                         </a>

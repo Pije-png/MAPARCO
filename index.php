@@ -49,32 +49,8 @@ if ($result->num_rows > 0) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>MAPARCO</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-        * {
-            font-family: "Poppins", sans-serif;
-            box-sizing: border-box;
-        }
-
-        .product-image {
-            width: 100%;
-            max-height: 120px;
-            object-fit: contain;
-            border-bottom: 1px solid #c1c1c1;
-            margin-bottom: 10px;
-            margin-top: 5px;
-        }
-
-        .card-body {
-            text-align: left;
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border: 1px solid red;
-            text-decoration: none;
+        .container-md {
+            padding: 15px;
         }
 
         .sliding {
@@ -96,90 +72,219 @@ if ($result->num_rows > 0) {
             background-color: rgba(248, 249, 250, 0.50);
         }
 
-        .text a {
-            margin-top: 20px;
-            width: 30%;
-            padding: 10px;
+        .product {
+            border-radius: 10px;
         }
-    </style>
 
-    <style>
-        /* ========= modals ========== */
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
+        .product-image {
             width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            font-size: 12px;
-            background-color: rgba(0, 0, 0, 0.4);
+            max-height: 120px;
+            object-fit: contain;
+            margin-bottom: 15px;
         }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 1% auto;
-            padding: 30px;
-            border: 1px solid #888;
-            text-align: justify;
-            position: relative;
-            width: 80%;
-            /* Default width for larger screens */
-            max-width: 400px;
-            /* Maximum width for larger screens */
-        }
-
-        .modal-content .continue-button {
-            display: block;
-            margin: 0 auto;
+        .col .card-body {
+            text-align: left;
+            padding: 10px;
             font-size: 13px;
+            max-width: 150px;
         }
 
-        .modal-content h5 {
-            color: #888;
-            font-weight: bolder;
-        }
-
-        .modal-content .close {
-            color: darkred;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        .modal-content .close:hover,
-        .modal-content .close:focus {
+        .product-price {
             color: red;
+            position: absolute;
+            bottom: 2px;
+        }
+
+        .col .card {
+            padding: 10px;
+            transition: transform 0.3s ease;
             text-decoration: none;
-            cursor: pointer;
+            min-height: 230px;
+            max-height: auto;
         }
 
-        /* ============================= */
-        .load button {
-            display: block;
-            width: 387px;
-            height: 40px;
-            margin: 0 auto;
-            font-family: Roboto-Medium;
-            font-size: 14px;
-            line-height: 40px;
-            color: #1a9cb8;
-            text-align: center;
-            text-transform: uppercase;
-            cursor: pointer;
-            border: 1px solid #1a9cb8;
+        .card:hover {
+            border: 1px solid red;
+            text-decoration: none;
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
         }
 
-        .load button:hover {
-            background-color: lightblue;
+        .carousel-item img {
+            max-width: 100%;
+            height: 280px;
+            /* margin-top: 40px; */
+        }
+
+        .star-rating i {
+            color: #f39c12;
         }
 
         /* Media query for Android size */
+        @media (max-width: 510px) {
+            .modal-content {
+                top: 10%;
+                width: 64%;
+                max-width: 320px;
+            }
+
+            .modal img {
+                width: 100%;
+            }
+
+            .text a {
+                margin-top: 20px;
+                width: 50%;
+                padding: 10px;
+            }
+
+            .login_continue button {
+                font-size: 13px;
+                width: 100%;
+                background-color: #dc3545;
+                color: #fff;
+                border: none;
+                padding: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .login_continue button:hover {
+                background-color: #c82333;
+            }
+
+        }
+
+        @media (max-width: 510px) {
+            .row.row-cols-md-5 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .card-body p {
+                font-size: 12px;
+                line-height: 12px;
+            }
+
+            .col .card {
+                padding: 10px;
+                min-height: 182px;
+                max-height: auto;
+                width: 100%;
+            }
+
+            .product-image {
+                max-height: 100px;
+                margin-bottom: 5px;
+            }
+
+            .star,
+            .text-muted {
+                font-size: 12px;
+            }
+
+            .div h3 {
+                font-size: 20px;
+            }
+
+            .carousel-item img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .top-products-container .top-product-item {
+                width: 130px;
+            }
+
+            .top-product-item a img {
+                height: 100px;
+                object-fit: contain;
+            }
+        }
+
+        h6 {
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .product-label {
+            border-radius: 10px;
+            border-bottom: 5px solid #15BE2F;
+            /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2); */
+        }
+
+        .product,
+        .product-label,
+        .top-products-container {
+            background-color: #ffffff;
+        }
+
+        .product p,
+        .top-products-container p {
+            font-size: 12px;
+        }
+
+        .top-product-label {
+            border-bottom: 1px solid #c6c6c6;
+        }
+
+        .top-product-item {
+            width: 180px;
+        }
+
+        .top-product-item img {
+            height: 120px;
+            object-fit: contain;
+        }
+
+        .top-products-container {
+            /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2); */
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .top-products {
+            white-space: nowrap;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+
+        .top-products::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .top-products::-webkit-scrollbar-thumb {
+            background-color: transparent;
+        }
+
+        .top-products::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .top-product-item {
+            flex: 0 0 auto;
+        }
+
+        .rankbadge {
+            position: absolute;
+            top: 0px;
+            left: 15px;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, #ff7f00, #ff4500);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            width: 30px;
+            height: 30px;
+            clip-path: polygon(50% 100%, 100% 70%, 100% 0%, 0% 0%, 0% 70%);
+        }
+
         @media (max-width: 510px) {
             .modal-content {
                 top: 10%;
@@ -238,9 +343,9 @@ if ($result->num_rows > 0) {
                 line-height: 12px;
             }
 
-            .card {
+            .top-product-container .card {
                 padding: 10px;
-                min-height: 170px;
+                min-height: 182px;
                 max-height: auto;
                 width: 100%;
             }
@@ -266,63 +371,169 @@ if ($result->num_rows > 0) {
             }
         }
 
-        /* ============================== */
-    </style>
+        /* For small phones (iPhone SE, older Android phones) */
+        @media (max-width: 320px) {
+            .product {
+                background-color: transparent;
+            }
+        }
 
+        /* For most smartphones (iPhone 6/7/8, X, 11, 12, 13, 14, Android phones) */
+        @media (max-width: 414px) {
+            .product {
+                background-color: transparent;
+            }
+        }
+
+        /* For larger phones and smaller tablets (Android phones, smaller tablets, iPad Mini) */
+        @media (max-width: 600px) {
+            .product {
+                background-color: transparent;
+            }
+        }
+
+        /* For medium tablets (iPad Mini, standard iPads, Android tablets) */
+        @media (max-width: 768px) {
+            .product {
+                background-color: transparent;
+            }
+        }
+
+        /* For larger tablets (iPad Air, iPad Pro, Android large tablets) */
+        @media (max-width: 834px) {
+            .product {
+                background-color: transparent;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <?php include 'navbar-index.php'; ?>
-
-    <div class="container-fluid mt-1 pt-5">
-        <div class="sliding">
-            <div class="text p-3">
-                <h2>So deliciously easy.</h2>
-                <p>Discover the sweet sensation of Natta de Coco! Delightful, chewy, and refreshing.</p>
-                <p class="mb-0">Try it now for a taste adventure!</p>
-                <a href='login.php' class='btn btn-md btn-success rounded-0'>GET STARTED</a>
+    <div class="container-fluid">
+        <div class="row pt-5">
+            <div class="sliding">
+                <div class="text p-3">
+                    <h2>So deliciously easy.</h2>
+                    <p>Discover the sweet sensation of Natta de Coco! Delightful, chewy, and refreshing.</p>
+                    <p class="mb-0">Try it now for a taste adventure!</p>
+                    <a href='login.php' class='btn btn-md btn-success rounded-0'>GET STARTED</a>
+                </div>
             </div>
         </div>
-        <div class="product bg-success mt-3 p-3 bg-opacity-10 border border-success border-start rounded-0">
-            <div class="div">
-                <h3 class="text-success text-center">Products</h3>
-            </div>
-            <div class="row row-cols-md-5 row-cols-sm-2 row-cols-2 g-2 mt-2 px-md-5 px-sm-2">
-                <?php
-                if (!empty($products)) {
-                    foreach ($products as $product) {
-                        $avg_rating = round($product["AvgRating"], 1);
-                        $full_stars = intval($avg_rating);
-                        $empty_stars = 5 - $full_stars;
+    </div>
 
-                        echo "<div class='col'>";
-                        echo "<div class='card h-100' onclick='showModal(" . json_encode($product) . ")'>";
-                        echo "<img src='admin/management/" . $product["Photo"] . "' alt='Product Image' class='card-img-top product-image'>";
-                        echo "<div class='card-body'>";
-                        echo "<p class='card-title'>" . $product["ProductName"] . "</p>";
-                        echo "<div class='star-rating'>";
-                        for ($i = 0; $i < $full_stars; $i++) {
-                            echo '<i class="bi bi-star-fill text-warning"></i>';
-                        }
-                        for ($i = 0; $i < $empty_stars; $i++) {
-                            echo '<i class="bi bi-star"></i>';
-                        }
-                        echo "<span class='text-muted'>($avg_rating/5)</span>";
-                        echo "</div>";
-                        echo "<p class='text-danger'>&#8369;" . $product["Price"] . "</p>";
-                        echo "</div>";
-                        echo "</div>";
-                        echo "</div>";
+    <div class="container-lg">
+        <div class="top-products-container rounded-0 mt-3 p-0">
+            <div class="top-product-label d-flex justify-content-between p-3">
+                <h6 class="text-success fw-semibold">Top Products</h6>
+            </div>
+
+            <!-- Horizontal Scroll for Top Products -->
+            <div class="top-products d-flex overflow-auto p-3">
+                <?php
+                // Fetch the top-rated products from the database (limit to 6)
+                $sql_top = "SELECT p.ProductID, p.Photo, p.ProductName, p.Price, SUM(o.Quantity) AS TotalSales, AVG(r.Rating) AS AvgRating
+    FROM products p
+    LEFT JOIN orderitems o ON p.ProductID = o.ProductID
+    LEFT JOIN reviews r ON p.ProductID = r.ProductID
+    GROUP BY p.ProductID
+    ORDER BY TotalSales DESC
+    LIMIT 6";
+
+                $result_top = $conn->query($sql_top);
+
+                if ($result_top->num_rows > 0) {
+                    while ($row_top = $result_top->fetch_assoc()) {
+                        // Calculate star rating
+                        $avg_rating_top = round($row_top["AvgRating"] ?? 0, 1); // Default to 0 if AvgRating is null
+                        $full_stars_top = intval($avg_rating_top);
+                        $empty_stars_top = 5 - $full_stars_top;
+                        $monthly_sales = number_format($row_top["TotalSales"]) . "K+";
+                ?>
+                        <div class="top-product-item text-center me-3">
+                            <div class="position-relative card">
+                                <!-- Product Image -->
+                                <a href='login.php' class='d-block'>
+                                    <img src='admin/management/<?php echo $row_top["Photo"]; ?>' alt='Top Product Image' class='img-fluid'>
+                                </a>
+                                <!-- "TOP" Badge -->
+                                <div class="rankbadge">
+                                    <span class="position-absolute rounded-0">TOP</span>
+                                </div>
+                            </div>
+                            <p class='product-name fw-semibold m-0' style="color: #4a525a; word-wrap: break-word; white-space: normal;"><?php echo $row_top["ProductName"]; ?></p>
+                            <!--<p class='text-muted monthly-sale'>Monthly Sales <?php echo $monthly_sales; ?></p>-->
+                        </div>
+                <?php
                     }
                 } else {
-                    echo "<p class='col'>No products found</p>";
+                    echo "<p>No top products found</p>";
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="product-label rounded-0 mt-4 pt-3">
+            <h6 class="text-success text-center fw-semibold">DAILY DISCOVER</h6>
+        </div>
+        <div class="product rounded-0">
+            <div class="row row-cols-md-5 row-cols-sm-2 row-cols-2 g-2 mt-3 px-md-2">
+                <?php
+                // Fetch and shuffle product data from the database
+                $sql = "SELECT p.ProductID, p.Photo, p.ProductName, p.Description, p.Price, AVG(r.Rating) AS AvgRating
+                            FROM products p
+                            LEFT JOIN reviews r ON p.ProductID = r.ProductID
+                            GROUP BY p.ProductID
+                            ORDER BY RAND()";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // Output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        // Calculate star rating
+                        $avg_rating = round($row["AvgRating"] ?? 0, 1); // Default to 0 if AvgRating is null
+                        $full_stars = intval($avg_rating);
+                        $empty_stars = 5 - $full_stars;
+                ?>
+                        <div class="col">
+                            <a href='login.php' class='card rounded-1 grid-item'>
+                                <img src='admin/management/<?php echo $row["Photo"]; ?>' alt='Product Image' class='card-img-top product-image'>
+                                <div class='card-body product-details p-0'>
+                                    <p class='card-title product-name'><?php echo $row["ProductName"]; ?></p>
+                                    <div class="star-rating">
+                                        <?php
+                                        // Display full stars
+                                        for ($i = 0; $i < $full_stars; $i++) {
+                                            echo '<i class="bi bi-star-fill text-warning star"></i>';
+                                        }
+                                        // Display empty stars
+                                        for ($i = 0; $i < $empty_stars; $i++) {
+                                            echo '<i class="bi bi-star text-warning star"></i>';
+                                        }
+                                        ?>
+                                        <span class="text-muted">(<?php echo $avg_rating; ?>/5)</span>
+                                    </div>
+                                    <p class='card-text product-price fw-semibold'>&#8369;<?php echo $row["Price"]; ?></p>
+                                </div>
+                            </a>
+                        </div>
+                <?php
+                    }
+                } else {
+                    echo "<p>No products found</p>";
                 }
                 $conn->close();
                 ?>
             </div>
-
         </div>
     </div>
+
+    <footer class="text-center text-start text-light bg-secondary mt-4">
+        <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.2)">
+            <small>© 2024 Copyright MAPARCO</small>
+        </div>
+    </footer>
 
     <div id="productModal" class="modal">
         <div class="modal-content">

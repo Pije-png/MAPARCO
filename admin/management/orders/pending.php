@@ -1,6 +1,19 @@
 <?php
 include '../../../connection.php';
 
+// Fetch admin details from the database
+$admin_id = $_SESSION['admin_id'];
+$query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ?");
+$query->bind_param("i", $admin_id);
+$query->execute();
+$result = $query->get_result();
+$admin = $result->fetch_assoc();
+
+// Set default values in case data is missing
+$admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
+$admin_photo = htmlspecialchars($admin['photo'] ?? '../../path/to/default/photo.png');
+$admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+
 if (isset($_POST['update_global_status'])) {
     $orderIDs = $_POST['selected_order_ids'];
     $orderIDsArray = explode(',', $orderIDs);
@@ -126,7 +139,7 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" href="img/MAPARCO.png" />
-    <link rel="stylesheet" href="css/order1s.css">
+    <link rel="stylesheet" href="css/orders3.css">
     <title>Orders</title>
 </head>
 
@@ -135,9 +148,10 @@ $pending_count = $pending_count_result->fetch_assoc()['pending_count'];
     <?php include 'sidebar-orders.php'; ?>
 
     <section class="home">
+        <?php include 'header.php'; ?>
         <div class="order-container">
-            <div class="container-fluid">
-                <div class="pt-2 pb-5">
+            <div class="container-fluid pt-5">
+                <div class="pt-2">
                     <div class="head pb-2">
                         <div class="arrow left"></div>
                         <p class="pending-header text-center h4 fw-bold text-light" style="font-style: italic; font-family: cursive; "><i class="fa-solid fa-fire"></i> List of Pending</p>

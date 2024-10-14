@@ -1,6 +1,21 @@
 <?php
 include '../../connection.php';
 
+// HEADER
+// Fetch admin details from the database
+$admin_id = $_SESSION['admin_id'];
+$query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ?");
+$query->bind_param("i", $admin_id);
+$query->execute();
+$result = $query->get_result();
+$admin = $result->fetch_assoc();
+
+// Set default values in case data is missing
+$admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
+$admin_photo = htmlspecialchars($admin['photo'] ?? 'path/to/default/photo.png');
+$admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+// HEADER
+
 // SQL query to fetch customer data
 $sql = "SELECT CustomerID, Name, Email, create_on FROM customers";
 $result = $conn->query($sql);
@@ -21,11 +36,16 @@ $customers_count = $result->num_rows;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/MAPARCO.png" />
     <title>Customers</title>
-    <!-- <link rel="stylesheet" href="Manage.css"> -->
     <style>
+        .container-fluid {
+            background: linear-gradient(to bottom, MediumSeaGreen, white);
+            /* background-color: #f1f1f1; */
+        }
+
         .admin-dashboard {
             width: 100%;
             border-collapse: collapse;
+            background-color: #ffffff;
             /* margin-bottom: 0; */
         }
 
@@ -51,66 +71,64 @@ $customers_count = $result->num_rows;
     </style>
 </head>
 
-<body class="bg bg-light">
+<body>
 
     <?php include 'sidebar.php'; ?>
 
-
     <section class="home">
-        <div class="customer-container">
-            <div class="container-fluid">
-                <div class="head pt-3">
-                    <h4 class="text-center">Registered</h4>
+        <?php include 'header.php'; ?>
+        <div class="container-fluid vh-100">
+            <div class="mb-5 mt-5 py-5 px-3">
+                <div class="head pb-2">
+                    <div class="arrow left"></div>
+                    <p class="h3 fw-bold text-light text-center"
+                        style="font-family: cursive; ">
+                        <i class="fa-solid fa-fire"></i> 
+                        List of Registered
+                    </p>
+                    <div class="arrow right"></div>
                 </div>
-                <div class="orders-table-container">
-                    <table class="admin-dashboard">
-                        <thead>
-                            <tr class="fw-bold fs-5 bg bg-success text-light">
-                                <th colspan="7">Customers Lists
-                                    <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo $customers_count; ?></span>
-                                </th>
-                            </tr>
-                            <tr class="text-center">
-                                <!-- <th>CustomerID</th> -->
-                                <th style="width:2%"></th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Joined on: </th>
-                                <!-- <th>Tools</th> -->
-                            </tr>
-                        </thead>
-                        <tbody class="bg bg-light text-center">
-                            <?php
-                            $row_counter = 1; // Initialize row_counter
+                <!-- <div class="orders-table-container"> -->
+                <table class="admin-dashboard">
+                    <thead>
+                        <tr class="fw-bold fs-5 bg bg-success text-light">
+                            <th colspan="7" class="py-2">Customers Lists
+                                <span style="font-size: 12px;" class="badge text-bg-danger"><?php echo $customers_count; ?></span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <!-- <th>CustomerID</th> -->
+                            <th style="width:2%"></th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Joined on: </th>
+                            <!-- <th>Tools</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $row_counter = 1; // Initialize row_counter
 
-                            if ($result && $result->num_rows > 0) {
-                                // Output data of each row
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row_counter++ . "</td>"; // Increment row_counter
-                                    echo "<td>" . $row["Name"] . "</td>";
-                                    echo "<td>" . $row["Email"] . "</td>";
-                                    echo "<td>" . date("F j, Y", strtotime($row["create_on"])) . "</td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='4'>No customers found</td></tr>";
+                        if ($result && $result->num_rows > 0) {
+                            // Output data of each row
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row_counter++ . "</td>"; // Increment row_counter
+                                echo "<td>" . $row["Name"] . "</td>";
+                                echo "<td>" . $row["Email"] . "</td>";
+                                echo "<td>" . date("F j, Y", strtotime($row["create_on"])) . "</td>";
+                                echo "</tr>";
                             }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+                        } else {
+                            echo "<tr><td colspan='4'>No customers found</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+                <!-- </div> -->
             </div>
         </div>
     </section>
-
-    <script>
-        const toggle = document.querySelector(".toggle");
-        const sidebar = document.querySelector(".sidebar");
-        toggle.addEventListener("click", () => {
-            sidebar.classList.toggle("close");
-        });
-    </script>
 </body>
 
 </html>
