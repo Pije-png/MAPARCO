@@ -7,7 +7,7 @@ $success_message = "";
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "MAPARCO";
+$dbname = "maparco_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "MAPARCO";
+$dbname = "maparco_db";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

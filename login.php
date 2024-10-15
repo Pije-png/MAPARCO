@@ -6,7 +6,7 @@ $error_message = ""; // Initialize error message
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "MAPARCO";
+$dbname = "maparco_db";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
