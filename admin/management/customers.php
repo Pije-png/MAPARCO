@@ -2,18 +2,42 @@
 include '../../connection.php';
 
 // HEADER
-// Fetch admin details from the database
-$admin_id = $_SESSION['admin_id'];
-$query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ?");
-$query->bind_param("i", $admin_id);
-$query->execute();
-$result = $query->get_result();
-$admin = $result->fetch_assoc();
+// Initialize variables
+$admin_id = null;
+$super_admin_id = null;
 
-// Set default values in case data is missing
-$admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
-$admin_photo = htmlspecialchars($admin['photo'] ?? 'path/to/default/photo.png');
-$admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+// Check if admin or super admin is logged in
+if (isset($_SESSION['admin_id'])) {
+    $admin_id = $_SESSION['admin_id']; // Regular admin session
+} elseif (isset($_SESSION['super_admin_id'])) {
+    $super_admin_id = $_SESSION['super_admin_id']; // Super admin session
+}
+
+// Fetch admin or super admin details from the database
+if ($admin_id) {
+    $query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ? AND Is_Admin = 1");
+    $query->bind_param("i", $admin_id);
+} elseif ($super_admin_id) {
+    $query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ? AND Is_SuperAdmin = 1");
+    $query->bind_param("i", $super_admin_id);
+}
+
+if ($query) {
+    $query->execute();
+    $result = $query->get_result();
+    $admin = $result->fetch_assoc();
+
+    // Set default values in case data is missing
+    $admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
+    $admin_photo = htmlspecialchars($admin['photo'] ?? 'path/to/default/photo.png');
+    $admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+} else {
+    // If neither admin nor super admin is logged in, set defaults
+    $admin_username = 'Admin';
+    $admin_photo = 'path/to/default/photo.png';
+    $admin_full_name = 'Administrator';
+}
+
 // HEADER
 
 // SQL query to fetch customer data

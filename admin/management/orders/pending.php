@@ -1,18 +1,44 @@
 <?php
 include '../../../connection.php';
 
-// Fetch admin details from the database
-$admin_id = $_SESSION['admin_id'];
-$query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ?");
-$query->bind_param("i", $admin_id);
-$query->execute();
-$result = $query->get_result();
-$admin = $result->fetch_assoc();
+// HEADER
+// Initialize variables
+$admin_id = null;
+$super_admin_id = null;
 
-// Set default values in case data is missing
-$admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
-$admin_photo = htmlspecialchars($admin['photo'] ?? '../../path/to/default/photo.png');
-$admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+// Check if admin or super admin is logged in
+if (isset($_SESSION['admin_id'])) {
+    $admin_id = $_SESSION['admin_id']; // Regular admin session
+} elseif (isset($_SESSION['super_admin_id'])) {
+    $super_admin_id = $_SESSION['super_admin_id']; // Super admin session
+}
+
+// Fetch admin or super admin details from the database
+if ($admin_id) {
+    $query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ? AND Is_Admin = 1");
+    $query->bind_param("i", $admin_id);
+} elseif ($super_admin_id) {
+    $query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ? AND Is_SuperAdmin = 1");
+    $query->bind_param("i", $super_admin_id);
+}
+
+if ($query) {
+    $query->execute();
+    $result = $query->get_result();
+    $admin = $result->fetch_assoc();
+
+    // Set default values in case data is missing
+    $admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
+    $admin_photo = htmlspecialchars($admin['photo'] ?? 'header/default/photo.png');
+    $admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+} else {
+    // If neither admin nor super admin is logged in, set defaults
+    $admin_username = 'Admin';
+    $admin_photo = 'header/default/photo.png';
+    $admin_full_name = 'Administrator';
+}
+
+// HEADER
 
 if (isset($_POST['update_global_status'])) {
     $orderIDs = $_POST['selected_order_ids'];
@@ -23,6 +49,16 @@ if (isset($_POST['update_global_status'])) {
 
     if ($newOrderStatus || $newPaymentStatus) {
         foreach ($orderIDsArray as $orderID) {
+            // Fetch current order and payment status before updating
+            $query = $conn->prepare("SELECT OrderStatus, PaymentStatus FROM orders WHERE OrderID = ?");
+            $query->bind_param("i", $orderID);
+            $query->execute();
+            $result = $query->get_result();
+            $order = $result->fetch_assoc();
+
+            $oldOrderStatus = $order['OrderStatus'];
+            $oldPaymentStatus = $order['PaymentStatus'];
+
             if ($newOrderStatus) {
                 $stmt = $conn->prepare("UPDATE orders SET OrderStatus = ? WHERE OrderID = ?");
                 $stmt->bind_param("si", $newOrderStatus, $orderID);
@@ -34,6 +70,14 @@ if (isset($_POST['update_global_status'])) {
                 $stmt->bind_param("si", $newPaymentStatus, $orderID);
                 $stmt->execute();
             }
+
+            // Log the update in the order_status_history table
+            $log_stmt = $conn->prepare(
+                "INSERT INTO order_status_history (OrderID, UpdatedBy, OldOrderStatus, NewOrderStatus, OldPaymentStatus, NewPaymentStatus) 
+                 VALUES (?, ?, ?, ?, ?, ?)"
+            );
+            $log_stmt->bind_param("iissss", $orderID, $admin_id, $oldOrderStatus, $newOrderStatus, $oldPaymentStatus, $newPaymentStatus);
+            $log_stmt->execute();
         }
 
         $global_update_message = "Orders updated successfully!";

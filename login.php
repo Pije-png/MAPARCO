@@ -38,24 +38,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "Incorrect password. Please try again.";
         }
     } else {
-        // Check if the user is an admin
-        $sql_admin = "SELECT * FROM admins WHERE Email = '$email' AND Is_Admin = 1";
-        $result_admin = $conn->query($sql_admin);
+        // Check if the user is a super admin
+        $sql_superadmin = "SELECT * FROM admins WHERE Email = '$email' AND Is_SuperAdmin = 1";
+        $result_superadmin = $conn->query($sql_superadmin);
 
-        if ($result_admin->num_rows == 1) {
-            $row_admin = $result_admin->fetch_assoc();
+        if ($result_superadmin->num_rows == 1) {
+            $row_superadmin = $result_superadmin->fetch_assoc();
             // Verify the password
-            if (password_verify($password, $row_admin['Password'])) {
-                // Password is correct, set session variables for admin and redirect to admin dashboard
-                $_SESSION['admin_id'] = $row_admin['ID'];
-                $_SESSION['admin_email'] = $row_admin['Email'];
+            if (password_verify($password, $row_superadmin['Password'])) {
+                // Password is correct, set session variables for super admin and redirect to super admin dashboard
+                $_SESSION['super_admin_id'] = $row_superadmin['ID'];
+                $_SESSION['super_admin_email'] = $row_superadmin['Email'];
                 header("Location: admin/home.php");
                 exit();
             } else {
                 $error_message = "Incorrect password. Please try again.";
             }
         } else {
-            $error_message = "Please enter valid information";
+            // Check if the user is an admin
+            $sql_admin = "SELECT * FROM admins WHERE Email = '$email' AND Is_Admin = 1";
+            $result_admin = $conn->query($sql_admin);
+
+            if ($result_admin->num_rows == 1) {
+                $row_admin = $result_admin->fetch_assoc();
+                // Verify the password
+                if (password_verify($password, $row_admin['Password'])) {
+                    // Password is correct, set session variables for admin and redirect to admin dashboard
+                    $_SESSION['admin_id'] = $row_admin['ID'];
+                    $_SESSION['admin_email'] = $row_admin['Email'];
+                    header("Location: admin/home.php");
+                    exit();
+                } else {
+                    $error_message = "Incorrect password. Please try again.";
+                }
+            } else {
+                $error_message = "Please enter valid information.";
+            }
         }
     }
 }

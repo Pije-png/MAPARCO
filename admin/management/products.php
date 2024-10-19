@@ -2,27 +2,66 @@
 include '../../connection.php';
 
 // HEADER
-// Fetch admin details from the database
-$admin_id = $_SESSION['admin_id'];
-$query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ?");
-$query->bind_param("i", $admin_id);
-$query->execute();
-$result = $query->get_result();
-$admin = $result->fetch_assoc();
+// Initialize variables
+$admin_id = null;
+$super_admin_id = null;
 
-// Set default values in case data is missing
-$admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
-$admin_photo = htmlspecialchars($admin['photo'] ?? 'path/to/default/photo.png');
-$admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+// Check if admin or super admin is logged in
+if (isset($_SESSION['admin_id'])) {
+    $admin_id = $_SESSION['admin_id']; // Regular admin session
+} elseif (isset($_SESSION['super_admin_id'])) {
+    $super_admin_id = $_SESSION['super_admin_id']; // Super admin session
+}
+
+// Fetch admin or super admin details from the database
+if ($admin_id) {
+    $query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ? AND Is_Admin = 1");
+    $query->bind_param("i", $admin_id);
+} elseif ($super_admin_id) {
+    $query = $conn->prepare("SELECT Username, photo, Full_Name FROM admins WHERE ID = ? AND Is_SuperAdmin = 1");
+    $query->bind_param("i", $super_admin_id);
+}
+
+if ($query) {
+    $query->execute();
+    $result = $query->get_result();
+    $admin = $result->fetch_assoc();
+
+    // Set default values in case data is missing
+    $admin_username = htmlspecialchars($admin['Username'] ?? 'Admin');
+    $admin_photo = htmlspecialchars($admin['photo'] ?? 'path/to/default/photo.png');
+    $admin_full_name = htmlspecialchars($admin['Full_Name'] ?? 'Administrator');
+} else {
+    // If neither admin nor super admin is logged in, set defaults
+    $admin_username = 'Admin';
+    $admin_photo = 'path/to/default/photo.png';
+    $admin_full_name = 'Administrator';
+}
+
 // HEADER
 
 // Initialize messages
 $global_message = "";
 $global_update_message = "";
 
+// Function to log activity
+if (!function_exists('logActivity')) {
+    function logActivity($conn, $admin_id, $action, $product_id, $oldValue = null, $newValue = null)
+    {
+        // If the action is 'Added', set OldValue to NewValue
+        if ($action === 'Added') {
+            $oldValue = $newValue;  // Set OldValue to be the same as NewValue
+        }
+
+        $stmt = $conn->prepare("INSERT INTO activity_log (admin_id, action, product_id, OldValue, NewValue) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("isiss", $admin_id, $action, $product_id, $oldValue, $newValue);
+        $stmt->execute();
+    }
+}
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the add product form is submitted
+    // Add product section
     if (isset($_POST['submit'])) {
         // Process the form data
         $productName = $_POST['productName'];
@@ -69,14 +108,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $target_file = $target_dir . $file_name_without_ext . '_' . time() . '.' . $imageFileType; // Add timestamp to the file name
         }
 
-        // Attempt to upload the file if no errors
+        // Attempt to upload file if no errors
         if ($uploadOk == 1) {
             if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-                // File upload was successful, now proceed to insert product into database
+                // Insert product into the database
                 $sql = "INSERT INTO products (ProductName, Photo, Description, Price, QuantityAvailable) 
                         VALUES ('$productName', '$target_file', '$description', '$price', '$quantityAvailable')";
 
                 if ($conn->query($sql) === TRUE) {
+                    // Prepare NewValue data in JSON format
+                    $newValue = json_encode([
+                        'ProductName' => $productName,
+                        'Description' => $description,
+                        'Price' => $price,
+                        'QuantityAvailable' => $quantityAvailable
+                    ]);
+
+                    // Log the activity with the NewValue as both OldValue and NewValue for "Added" action
+                    logActivity($conn, $admin_id, "Added", $conn->insert_id, null, $newValue);
+
                     $global_message = "New product added successfully.";
                 } else {
                     $global_message = "Error adding product: " . $conn->error;
@@ -88,14 +138,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Check if the update form is submitted
+function logActivity($conn, $admin_id, $action, $product_id, $oldValue = null, $newValue = null)
+{
+    $stmt = $conn->prepare("INSERT INTO activity_log (admin_id, action, product_id, OldValue, NewValue) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("isiss", $admin_id, $action, $product_id, $oldValue, $newValue);
+    $stmt->execute();
+}
+
+// Update product section
 if (isset($_POST['update'])) {
-    // Process the form data and update the product in the database
     $productId = $_POST['productId'];
     $productName = $_POST['productName'];
     $description = $_POST['description'];
     $price = $_POST['price'];
     $quantityAvailable = $_POST['quantityAvailable'];
+
+    // Fetch old values for logging
+    $oldProduct = $conn->query("SELECT * FROM products WHERE ProductID = $productId")->fetch_assoc();
+
+    $oldValue = json_encode([
+        'ProductName' => $oldProduct['ProductName'],
+        'Description' => $oldProduct['Description'],
+        'Price' => $oldProduct['Price'],
+        'QuantityAvailable' => $oldProduct['QuantityAvailable']
+    ]);
+
+    $newValue = json_encode([
+        'ProductName' => $productName,
+        'Description' => $description,
+        'Price' => $price,
+        'QuantityAvailable' => $quantityAvailable
+    ]);
 
     // Update product query
     $sql = "UPDATE products SET 
@@ -106,6 +179,8 @@ if (isset($_POST['update'])) {
                 WHERE ProductID = $productId";
 
     if ($conn->query($sql) === TRUE) {
+        // Log just "Updated"
+        logActivity($conn, $admin_id, "Updated", $productId, $oldValue, $newValue);
         $global_update_message = "Product updated successfully!";
     } else {
         $global_update_message = "Error updating product: " . $conn->error;
@@ -121,6 +196,8 @@ if (isset($_POST['delete'])) {
     $sql = "DELETE FROM products WHERE ProductID = $productID";
 
     if ($conn->query($sql) === TRUE) {
+        // Log the activity with just "Deleted"
+        logActivity($conn, $admin_id, "Deleted", $productID);
         $global_update_message = "Product deleted successfully!";
     } else {
         $global_update_message = "Error deleting product: " . $conn->error;
@@ -161,8 +238,7 @@ $product_count = $result->num_rows;
                     <div class="head pb-2">
                         <div class="arrow left"></div>
                         <p class="h3 fw-bold text-light"
-                            style="font-family: cursive;"
-                            ><i class="fa-solid fa-fire"></i> 
+                            style="font-family: cursive;"><i class="fa-solid fa-fire"></i>
                             List of Products
                         </p>
                         <div class="arrow right"></div>

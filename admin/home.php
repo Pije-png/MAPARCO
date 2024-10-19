@@ -9,7 +9,14 @@ function redirectToLogin()
 
 // Perform the logout operation when a request is made to log out
 if (isset($_POST['confirmLogout'])) {
-    if (isset($_SESSION['admin_id'])) {
+    if (isset($_SESSION['super_admin_id'])) {
+        // Unset all of the session variables
+        $_SESSION = array();
+        // Destroy the session for the super admin
+        session_destroy();
+        // Redirect to login page
+        redirectToLogin();
+    } elseif (isset($_SESSION['admin_id'])) {
         // Unset all of the session variables
         $_SESSION = array();
         // Destroy the session for the admin
