@@ -358,6 +358,56 @@ $delivered_count = $delivered_count_result->fetch_assoc()['delivered_count'];
             }
         });
     </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.order-checkbox');
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            const clearCheckboxesBtn = document.getElementById('clearCheckboxes');
+
+            // Handle checkbox changes
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const tr = this.closest('tr');
+                    if (this.checked) {
+                        // Apply lightblue background and text color when selected
+                        tr.style.backgroundColor = 'lightblue';
+                        tr.style.color = 'black';
+                    } else {
+                        // Reset to default when unchecked
+                        tr.style.backgroundColor = '';
+                        tr.style.color = '';
+                    }
+                });
+            });
+
+            // Select all checkboxes and apply style
+            selectAllCheckbox.addEventListener('change', function() {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                    const tr = checkbox.closest('tr');
+                    if (this.checked) {
+                        tr.style.backgroundColor = 'lightblue';
+                        tr.style.color = 'black';
+                    } else {
+                        tr.style.backgroundColor = '';
+                        tr.style.color = '';
+                    }
+                });
+            });
+
+            // Clear checkboxes and reset styles
+            clearCheckboxesBtn.addEventListener('click', function() {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                    const tr = checkbox.closest('tr');
+                    tr.style.backgroundColor = '';
+                    tr.style.color = '';
+                });
+                selectAllCheckbox.checked = false;
+            });
+        });
+    </script>
 </body>
 
 </html>
