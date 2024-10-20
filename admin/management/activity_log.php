@@ -186,7 +186,7 @@ $result_order_logs = $conn->query($sql_order_logs);
             <button class="float-button">Back to dashboard</button>
         </a>
         <header>
-            <h1>Activity Log</h1>
+            <h2>Activity Log</h2>
         </header>
         <div class="container">
             <div class="admin-info">
@@ -240,7 +240,7 @@ $result_order_logs = $conn->query($sql_order_logs);
                                     </span>
                                 </td>
                                 <td><?php echo htmlspecialchars($log['product_id']); ?></td>
-                                <td><?php echo htmlspecialchars($log['ProductName'] ?? 'N/A'); ?></td>
+                                <td><?php echo htmlspecialchars($log['ProductName'] ?? 'Deleted'); ?></td>
                                 <td><?php echo date("F j, Y, g:i a", strtotime($log['timestamp'])); ?></td>
                                 <td>
                                     <button class="btn btn-secondary btn-sm" onclick="removeRow(this)">Clear</button>

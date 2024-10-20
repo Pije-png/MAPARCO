@@ -37,9 +37,15 @@
                     </li>
                     <?php if (isset($_SESSION['super_admin_id'])): ?>
                         <li class="nav-link">
+                            <a href="management/add_admin.php" class="nav-link-item" id="activity-log-link">
+                                <i class='fas fa-clipboard-list icon'></i>
+                                <span class="nav-text text">Admin Management</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
                             <a href="management/activity_log.php" class="nav-link-item" id="activity-log-link">
                                 <i class='fas fa-clipboard-list icon'></i>
-                                <span class="nav-text text">Activity Log</span>
+                                <span class="nav-text text">Admin Activity Log</span>
                             </a>
                         </li>
                     <?php endif; ?>
